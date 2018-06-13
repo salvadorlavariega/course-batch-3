@@ -2,10 +2,10 @@
   "name": "htmlparser",
   "version": "1.0.0",
   "description": "Html Parser",
-  "main": "index.js",
+  "main": "app/analizador_lexico.html",
   "scripts": {
     "test": "mocha --reporter spec",
-    "start": "node $NODE_DEBUG_OPTION server.js"
+    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" "
   },
   "author": "salvadorlavariega",
   "license": "MIT",
