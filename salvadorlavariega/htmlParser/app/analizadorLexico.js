@@ -21,7 +21,7 @@ const createTreeFrom = (code) =>{
 
     tree.nodes = nodes;
 
-    console.log("TREE");
+    console.log('tree');
     console.log(tree);
     return tree;
 }
