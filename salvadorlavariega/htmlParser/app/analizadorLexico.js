@@ -1,5 +1,4 @@
 'use strict';
-//const parser = require('parser');
 
 const parseHtmlbyFile = (contents) =>{
     const code = contents.replace(/(?:\r\n|\r|\n)/g, '');
@@ -13,10 +12,23 @@ const parseHtml = (id) =>{
     const elementNodes = document.getElementById('resultNodes');
     let code = elementHtml.value;
     code = code.replace(/(?:\r\n|\r|\n)/g, '');
-    const tree = createTreeFrom(code);
+    const tree = createTreeFromJson(code);
     elementNodes.innerHTML= JSON.stringify(tree);
 }
 
+const createTreeFromJson = (code) =>{
+    const tree = createNode('HTML', code);
+    const headTree = createNodeHead(code);
+    const bodyTree = createNodeBody(code);
+    const nodes = new Array();
+
+    nodes.push(headTree);
+    nodes.push(bodyTree);
+    tree.nodes = nodes;
+    console.log('tree');
+    console.log(tree);
+    return tree;
+}
 const createTreeFrom = (code) =>{
     const tree = createNode('HTML', code);
     const headTree = createNodeHead(code);
@@ -25,9 +37,7 @@ const createTreeFrom = (code) =>{
 
     nodes.push(JSON.stringify(headTree));
     nodes.push(JSON.stringify(bodyTree));
-
     tree.nodes = nodes;
-
     console.log('tree');
     console.log(tree);
     return tree;
@@ -68,7 +78,7 @@ const createNodeHead = (code) =>{
                 if(matchNode[2] !== null){
                     jsn.value = matchNode[2];
                 }
-                arrayJson.push(jsn)
+                arrayJson.push(jsn);
             }
         }
     }
@@ -92,7 +102,7 @@ const createNodeBody = (code) =>{
     const bodyMatch = extractChildsByNode('BODY',code);
     if(bodyMatch!==null){
         const nodes = findRecursive(bodyMatch[2]);
-        bodyTree.nodes.push(nodes);
+        bodyTree.nodes = nodes;
         return bodyTree;
     }
     else {
@@ -102,26 +112,34 @@ const createNodeBody = (code) =>{
 }
 
 const findRecursive = (code)=>{
-    if(code !== null){
+    const nodesArray = new Array();
+    while(code.trim() !== ''){
         let childs =  extractChilds(code);
-        if(childs === null) return null;
-        const nodeName = extractNodeName(childs[1]);
-        childs = extractChildsByNode(nodeName,code);
-        let node = createNode(nodeName,childs[0]);
-        if(childs[2] != null){
-            let newCode = childs[2].trim().replace(childs[0],'');
-            const childNode = findRecursive(newCode);
-            node.nodes.push(childNode);
-            return node;
-         } else {
-            return node;
+
+        if(childs !== null) {
+            const nodeName = extractNodeName(childs[1]);
+            childs = extractChildsByNode(nodeName, code);
+            let node = createNode(nodeName, childs[0]);
+            nodesArray.push(node);
+            code = code.replace(childs[0].trim(), '');
+            if(childs[2] !== null){
+                console.log(childs[2] );
+                node.nodes = findRecursive(childs[2].trim());
+            }
+        } else {
+            const node = {text:code.trim()};
+            nodesArray.push(node);
+            code = '';
         }
+
     }
+
+    return nodesArray;
 }
 
 const extractChilds = (code) =>{
     code = code.trim().toUpperCase();
-    const regex = new RegExp('^([<]{1}[\\w\\s\\.\\/\\"=]*[>]{1})([\\s\\w<>\\/\\"=:#%-_]{0,})([<]{1}[\\/]{1}[\\w]*[>]{1})$');
+    const regex = new RegExp('^([<]{1}[\\\w\\s\\.\\-_/\\"=]*[>]{1})([\\s\\w<>\\/\\"=:#%-_]{0,})([<]{1}[\\/]{1}[\\w]*[>]{1})$');
     return regex.exec(code);
 }
 
@@ -173,6 +191,7 @@ const extractAttributes = (code) => {
     return result;
 
 }
+
 module.exports = {
     parseHtmlbyFile:parseHtmlbyFile
 }
