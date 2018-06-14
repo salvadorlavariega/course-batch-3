@@ -7,6 +7,9 @@
     "test": "mocha --reporter spec",
     "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" "
   },
+  "bin": {
+    "pfile": "./bin/cli.js"
+  },
   "author": "salvadorlavariega",
   "license": "MIT",
   "devDependencies": {
