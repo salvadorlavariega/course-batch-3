@@ -1,0 +1,26 @@
+<HTML>
+<HEAD>
+    <TITLE>Analizador léxico de html</TITLE>
+</HEAD>
+<BODY>
+    <table width="100%">
+        <tr>
+            <td>
+                    <h2>Ingresa tu codigo html en el cuadro de texto:</h2>
+                    <input type="button" value="Analizar" onclick="parseHtml('htmlCode')"/>
+                <div>
+                    <textarea id="htmlCode" style="margin: 0px; width: 521px; height: 484px;"></textarea>
+                </div>
+
+            </td>
+            <td>
+                <div>
+                    <h2>El resultado es:</h2>
+                    <textarea id="resultNodes" style="margin: 0px; width: 521px; height: 484px;"></textarea>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript" src="analizadorLexico.js"></script>
+</BODY>
+</HTML>

@@ -1,0 +1,23 @@
+{
+  "name": "module-npm",
+  "version": "1.0.0",
+  "description": "An application for generate documentation",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "bin": {
+    "wcdocs": "./bin/cli.js"
+  },
+  "keywords": [
+    "npm",
+    "module",
+    "documentation",
+    "frontend"
+  ],
+  "author": "Alfonso Rios",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.15.1"
+  }
+}

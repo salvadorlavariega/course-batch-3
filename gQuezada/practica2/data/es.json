@@ -1,0 +1,13 @@
+{
+    "header": "Cabecera",
+    "nav": [
+        "Pestaña 1",
+        "Pestaña 2"
+    ],
+    "title": "Titulo del post",
+    "content": "Contenido del post",
+    "comments": [
+        "comentario 1",
+        "comentario 2"
+    ]
+}

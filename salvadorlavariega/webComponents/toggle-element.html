@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+    <body>
+    <template id="toggleTemplate">
+        <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+            }
+
+            .switch input {display:none;}
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+                -webkit-transform: translateX(26px);
+                -ms-transform: translateX(26px);
+                transform: translateX(26px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+        </style>
+
+        <label class="switch">
+            <input id="check" type="checkbox">
+            <span class="slider"></span>
+        </label>
+    </template>
+
+    <template id="ulTemplate">
+        <ul-element  content='one,two,three,four'></ul-element>
+    </template>
+    <script>
+
+        (function ToggleElement(customElements, document) {
+            'use strict';
+            //
+
+            class ToggleElement extends HTMLElement {
+                constructor() {
+                    super();
+                    const shadowRoot = this.attachShadow({mode: 'open'});
+                    const d = document.currentScript.ownerDocument;
+                    const toggleTemplate = d.querySelector('#toggleTemplate');
+                    const ulTemplate = d.querySelector('#ulTemplate');
+                    const tempInstance = d.importNode(toggleTemplate.content, true);
+                    shadowRoot.appendChild(d.importNode(tempInstance, true));
+
+                    this.addEventListener('click', (event) => {
+                        const isSelected = this.getAttribute('selected');
+                        if(isSelected === 'false') {
+                            this.setAttribute('selected', 'true');
+                            document.querySelector('#container').removeAttribute('style');
+                            document.querySelector('#container').appendChild(ulTemplate.content);
+
+                        } else {
+                            this.setAttribute('selected', 'false');
+                            document.querySelector('#container').style.display = 'none';
+                        }
+                       event.preventDefault();
+                    });
+                }
+
+
+            }
+            customElements.define('toggle-element', ToggleElement);
+        })(window.customElements, document);
+
+    </script>
+
+    </body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "factorial",
+  "version": "0.0.1",
+  "description": "Ejercicio de pruebas unitarias para el algoritmo factorial usando chaijs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "keywords": [
+    "factorial",
+    "pruebas",
+    "unitarias",
+    "js",
+    "javascript",
+    "centraal",
+    "chaijs"
+  ],
+  "author": "Christian Garcia",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}
