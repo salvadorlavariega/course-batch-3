@@ -1,0 +1,29 @@
+{
+  "name": "ejercicio_parser",
+  "version": "1.0.0",
+  "description": "Extraer todos los nodos de un archivo HTML y su CSS. Solamente extraer nodos y sub nodos. Cada nodos debera contener la estructura minima",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "bin": {
+    "central_parser": "./bin/cli.js"
+  },
+  "keywords": [
+    "js",
+    "parser",
+    "html",
+    "nodos",
+    "DOM",
+    "TDD"
+  ],
+  "author": "Christian Garcia",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  },
+  "dependencies": {
+    "commander": "^2.15.1"
+  }
+}

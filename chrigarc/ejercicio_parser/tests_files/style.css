@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--white-academy);
+    font-family: lato;
+}
+
+a {
+    text-decoration: none;
+}
+
+@font-face {
+    font-family: montserrat;
+    src: url('../fonts/Montserrat-Regular.ttf');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: montserrat;
+    src: url('../fonts/Montserrat-Black.ttf');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: lato;
+    src: url('../fonts/Lato-Regular.ttf');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: lato;
+    src: url('../fonts/Lato-Black.ttf');
+    font-weight: bold;
+}
