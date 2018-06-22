@@ -1,0 +1,43 @@
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+        <template id="ulTemplate">
+            <ul id="lista">
+            </ul>
+
+        </template>
+        <li id="item"></li>
+
+        <script>
+
+            (function UlElement(customElements, document) {
+                'use strict';
+                //
+
+                class UlElement extends HTMLElement {
+                    constructor() {
+                        super();
+                        const shadowRoot = this.attachShadow({mode: 'open'});
+                        let ulTemplate = document.querySelector('#ulTemplate');
+                        let liTemplate = document.querySelector('#item');
+                        const ulInstance = document.importNode(ulTemplate.content, true);
+                        const ul = ulInstance.querySelector('#lista');
+                        const content = this.getAttribute('content');
+                        const list = content.split(',');
+                        for(const text of list){
+                            const liInstance = document.importNode(liTemplate, true);
+                            liInstance.appendChild(document.createTextNode(text));
+                            ul.appendChild(liInstance);
+                        }
+                        shadowRoot.appendChild(ulInstance);
+                    }
+                }
+                customElements.define('ul-element', UlElement);
+            })(window.customElements, document.currentScript.ownerDocument);
+
+        </script>
+    </body>
+</html>
+
