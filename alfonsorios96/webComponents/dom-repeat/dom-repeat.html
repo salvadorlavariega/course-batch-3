@@ -1,0 +1,86 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+  ((customElements, document) => {
+    'use strict';
+
+    class DomRepeat extends HTMLElement {
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this._templatize();
+      }
+
+      get items() {
+        return this._validateInputData(this.getAttribute('items'));
+      }
+
+      set items(newValue) {
+        this.setAttribute('items', JSON.stringify(newValue));
+      }
+
+      static get observedAttributes() {
+        return [ 'items' ];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        switch (name) {
+          case 'items':
+            const template = this.querySelector('template');
+            this._render(template.parentNode.childNodes);
+            break;
+        }
+      }
+
+      _validateInputData(stringData) {
+        const array = JSON.parse(stringData);
+        if (Array.isArray(array) === true) {
+          return array;
+        } else {
+          throw new Error('The data for items must be array');
+        }
+      }
+
+      _templatize() {
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        const template = document.currentScript.ownerDocument.querySelector('template');
+        const templateContent = document.importNode(template.content, true);
+        shadowRoot.appendChild(templateContent);
+
+        const slot = this.shadowRoot.querySelector('slot');
+        const nodes = slot.assignedNodes();
+
+        this._render(nodes);
+      }
+
+      _render(nodes) {
+        for (const node of nodes) {
+          if (node.localName === 'template') {
+            const htmlTemplate = node.innerHTML;
+            this.shadowRoot.innerHTML = this._bindData(htmlTemplate);
+            this.dispatchEvent(new CustomEvent('dom-changed', {
+              bubbles: true,
+              composed: true
+            }));
+            break;
+          }
+        }
+      }
+
+      _bindData(html) {
+        let htmlStringRendered = '';
+        for (const item of this.items) {
+          htmlStringRendered += html.replace('[[item]]', item);
+        }
+        return htmlStringRendered;
+      }
+    }
+
+    customElements.define('dom-repeat', DomRepeat);
+  })(window.customElements, document);
+</script>
