@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web components</title>
+    <link rel="import" href="list.html">
+    <link rel="import" href="toogle.html">
+</head>
+<body>
+    <toggle-button></toggle-button>
+    <hr>
+    <list-personalized style="display: none" items='["Guillermo", "Quezada", "Martínez"]'></list-personalized>
+    <script>
+        (() => {
+            const printElemet = document.querySelector('list-personalized');
+            document.addEventListener('toggle-checked', () => {
+                printElemet.style.display = 'block';
+            });
+            document.addEventListener('toggle-unchecked', () => {
+                printElemet.style.display = 'none';
+            });
+        })();
+    </script>
+</body>
+</html>

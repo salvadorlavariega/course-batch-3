@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="import" href="chrigarc-button.html">
+    <link rel="import" href="chrigarc-list.html">
+</head>
+<body>
+    <h1>Web components</h1>
+    <div>
+        <ol>
+            <li>Crear un componente que contenga un botón toggle.</li>
+            <li>Crear otro componente que contenga una lista con
+            <pre>
+                &lt;ul&gt;
+                    &lt;li&gt;&lt;/li&gt;
+                    ...
+                &lt;ul&gt;
+            </pre>
+            <li>Los elementos &lt;li&gt; deben ser recibidos a través de un atributo/propiedad del componente 2. Tiene que ser un array de strings, donde cada entrada es un elemento de la lista.</li>
+            <li>El primer componente (botón toggle) deberá mostrar/ocultar el segundo componente (lista).</li>
+        </ol>
+        <ul>
+            <li> Basarse en los conceptos de template, shadowDom, html import y custom elements. (Deben incluir los 4 conceptos). Los ejemplos están en el repo alfonsorios96/webComponents</li>
+            <li> Usar binding visto en clase, y customEvents para comunicar los dos componentes.</li>
+            <li> Cada webComponent deberá tener su propio archivo html y deberán ser importados en un tercer documento HTML llamado index.html.</li>
+            <li> Subirlo a su repositorio antes de las 22h00 del día 21 de junio de 2018, UTM -6:00 Ciudad de México</li>
+        </ul>
+    </div>
+    <div>
+        <h3>Demo de la solución</h3>
+        <h4>Solo la lista de elementos</h4>
+        <chrigarc-list elements="[1, 2, 233, 4, 'texto']"></chrigarc-list>
+        <h4>componente con boton y lista</h4>
+        <chrigarc-button data-elements="[1, 2, 233, 4, 'texto', 1, 4, 6, 7, 6, 4, 2, 'Hola Mundo']"></chrigarc-button>
+    </div>
+</body>
+</html>

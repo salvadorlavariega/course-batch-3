@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web components</title>
+    <link rel="import" href="components/toggle-button/index.html">
+    <link rel="import" href="components/print-items/index.html">
+</head>
+<body>
+    <toggle-button-element></toggle-button-element>
+    <hr>
+    <print-items-element items='["foo", "bar", "lorem", "ipsum", "dolor"]'></print-items-element>
+    <script>
+        (() => {
+            const printElemet = document.querySelector('print-items-element');
+            document.addEventListener('toggle-checked', () => {
+                printElemet.style.display = 'block';
+            });
+            document.addEventListener('toggle-unchecked', () => {
+                printElemet.style.display = 'none';
+            });
+        })();
+    </script>
+</body>
+</html>

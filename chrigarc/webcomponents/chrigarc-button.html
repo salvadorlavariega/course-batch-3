@@ -1,0 +1,30 @@
+<script>
+    'use strict';
+    ((customElements) => {
+        class ChrigarcButton extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const btnElem = document.createElement('button');
+                btnElem.innerText = 'Mostrar / Ocultar';
+                const listElem = document.createElement('chrigarc-list');
+                listElem.setAttribute('elements', this.getAttribute('data-elements'));
+                shadowRoot.appendChild(btnElem);
+                shadowRoot.appendChild(listElem);
+                this.addEventListener('click', () => {
+                    this.dispatchEvent(new CustomEvent('one-event', {
+                        bubbles: true,
+                        composed: true,
+                    }));
+                    if(listElem.getAttribute('hidden')){
+                        listElem.removeAttribute('hidden');
+                    }else{
+                        listElem.setAttribute('hidden', true);
+                    }
+                });
+            }
+        }
+
+        customElements.define('chrigarc-button', ChrigarcButton);
+    })(window.customElements, document);
+</script>

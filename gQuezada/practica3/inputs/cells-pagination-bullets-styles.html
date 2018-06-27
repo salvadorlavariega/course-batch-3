@@ -1,0 +1,38 @@
+<dom-module id="cells-pagination-bullets-styles"><template><style>
+:host {
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  @apply (--cells-pagination-bullets); }
+
+button {
+  font: inherit;
+  min-height: initial;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  outline: none; }
+
+.bullet {
+  display: block;
+  width: var(--cells-pagination-bullets-size, 0.5rem);
+  height: var(--cells-pagination-bullets-size, 0.5rem);
+  margin: 0 var(--cells-pagination-bullets-separation, 0.3125rem);
+  border-radius: 50%;
+  background: var(--cells-pagination-bullets-color, rgba(64, 64, 64, 0.5));
+  @apply (--cells-pagination-bullets-inactive); }
+  .bullet__active {
+    background: var(--cells-pagination-bullets-color-active, rgba(51, 153, 255, 0.5));
+    @apply (--cells-pagination-bullets-active); }
+
+.icon {
+  display: block;
+  margin: 0 var(--cells-pagination-bullets-separation, 0.3125rem);
+  color: var(--cells-pagination-bullets-icon-color, rgba(64, 64, 64, 0.5));
+  @apply (--cells-pagination-bullets-icon-inactive); }
+  .icon__active {
+    color: var(--cells-pagination-bullets-icon-color-active, rgba(51, 153, 255, 0.5));
+    @apply (--cells-pagination-bullets-icon-active); }
+
+</style></template></dom-module>

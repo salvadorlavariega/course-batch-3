@@ -1,0 +1,55 @@
+<template>
+    <slot name="title"></slot>
+    <slot name="list"></slot>
+
+
+</template>
+
+<script>
+  (()=>{
+    class EjercicioL extends HTMLElement{
+
+      constructor(){
+        super();
+
+      }
+
+      connectedCallback(){
+        const shadowRoot = this.attachShadow({
+          mode : 'open'
+        });
+
+        const template = document.currentScript.ownerDocument.querySelector('template');
+        shadowRoot.innerHTML = template.innerHTML;
+      }
+
+      get karName(){
+        return this.karName;
+      }
+
+      set karName(myKarvalue){
+        this.setAttribute('kar-name',myKarvalue );
+      }
+
+      get item(){
+        return this.item;
+      }
+
+      set item(newValue){
+        this.setAttribute('item', newValue );
+      }
+
+      static get observedAttributes(){
+        return ['kar-name','item'];
+      }
+
+      attributeChangedCallback(name,myOldValue,myNewValue){
+
+        console.log(`the last value was ${myOldValue} and the new one ${myNewValue}`);
+      }
+
+    }
+
+    window.customElements.define('ejercicio-lun', EjercicioL);
+  })();
+</script>

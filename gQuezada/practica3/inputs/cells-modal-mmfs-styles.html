@@ -1,0 +1,148 @@
+<dom-module id="cells-modal-mmfs-styles"><template><style>
+:host {
+  display: block;
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 9999;
+  font-family: var(--mmfs-fontDefault, sans-serif);
+  @apply --cells-modal-mmfs; }
+
+:host([hidden]), [hidden] {
+  display: none !important; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+/**
+ * Empty mixins to set outline for :focus and :active states.
+ * These mixins are meant to be set in an application's theme.
+ * --cells-global-focus, --cells-global-active
+ */
+*:focus {
+  @apply --cells-global-focus; }
+
+*:active {
+  @apply --cells-global-active; }
+
+:host {
+  --cells-component-app-header-bg-color: var(--cells-modal-mmfs-header-bg-color, transparent);
+  --cells-component-app-header: {
+      font-family: var(--mmfs-fontDefault, sans-serif);
+      font-size: var(--mmfs-fontSizeDefaul, '12px');
+  };}
+
+.md-overlay {
+  position: fixed;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: var(--cells-modal-mmfs-md-overlay-background-color, rgba(18, 18, 18, 0.65));
+  -webkit-animation: fadein 0.5s ease-in-out forwards;
+  -moz-animation: fadein 0.5s ease-in-out forwards;
+  -o-animation: fadein 0.5s ease-in-out forwards;
+  animation: fadein 0.5s ease-in-out forwards;
+  @apply --cells--modal-mmfs-md-container; }
+
+.fadeout {
+  -webkit-animation: fadeout 0.5s ease-in-out forwards;
+  -moz-animation: fadeout 0.5s ease-in-out forwards;
+  -o-animation: fadeout 0.5s ease-in-out forwards;
+  animation: fadeout 0.5s ease-in-out forwards; }
+
+@-webkit-keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden; }
+  100% {
+    opacity: 1;
+    visibility: visible; } }
+
+@-moz-keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden; }
+  100% {
+    opacity: 1;
+    visibility: visible; } }
+
+@-o-keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden; }
+  100% {
+    opacity: 1;
+    visibility: visible; } }
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden; }
+  100% {
+    opacity: 1;
+    visibility: visible; } }
+
+@-webkit-keyframes fadeout {
+  100% {
+    opacity: 0;
+    visibility: hidden; }
+  0% {
+    opacity: 1;
+    visibility: visible; } }
+
+@-moz-keyframes fadeout {
+  100% {
+    opacity: 0;
+    visibility: hidden; }
+  0% {
+    opacity: 1;
+    visibility: visible; } }
+
+@-o-keyframes fadeout {
+  100% {
+    opacity: 0;
+    visibility: hidden; }
+  0% {
+    opacity: 1;
+    visibility: visible; } }
+
+@keyframes fadeout {
+  100% {
+    opacity: 0;
+    visibility: hidden; }
+  0% {
+    opacity: 1;
+    visibility: visible; } }
+
+.body {
+  height: 100%; }
+
+.modal-white {
+  --cells-component-app-header-color: var(--cells-modal-mmfs-header-color-md-white, #094fa4);
+  --cells-component-app-header-btn-color: var(--cells-modal-mmfs-header-btn-color-md-white, #094fa4);
+  --cells-component-app-header-title: { position: absolute; width: 100%; overflow: hidden; };
+  background-color: white;
+  height: calc(100% - 40px);
+  margin: 20px;
+  padding: 0;
+  border-radius: 4px; }
+
+.modal-transparent {
+  --cells-component-app-header-color: var(--cells-modal-mmfs-header-color-md-transparent, white);
+  --cells-component-app-header-btn-color: var(--cells-modal-mmfs-header-btn-color-md-transparent, white);
+  --cells-component-app-header-title: { position: absolute; width: 100%; overflow: hidden; };
+  background-color: transparent;
+  height: 100%;
+  padding-top: 30px; }
+
+.content-slot {
+  color: white;
+  height: calc(100% - 100px);
+  margin: 20px; }
+
+button:active {
+  @apply --cells-global-active; }
+
+</style></template></dom-module>

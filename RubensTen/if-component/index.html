@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Implementacion If-Component</title>
+    <link rel="import" href="render-component/index.html">
+</head>
+<body>
+    <button id="btn">change render</button>
+    <hr>
+    <render-component render-if="true">
+        <div slot="content">
+            lorem ipsum dolor
+        </div>
+    </render-component>
+    <script type="text/javascript">
+        (() => {
+            const btn = document.querySelector('#btn');
+            let flag = true;
+            const renderComponent = document.querySelector('render-component');
+            btn.addEventListener('click', () => {
+                flag = !flag;
+                renderComponent.renderIf = flag;
+            });
+        })();
+    </script>
+</body>
+</html>

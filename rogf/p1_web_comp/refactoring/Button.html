@@ -1,0 +1,78 @@
+<template>
+   <style>
+       div{
+            color: rgb(0, 122, 255);
+            border: 1px solid rgb(0, 122, 255);
+            border-radius: 4px;
+            display: inline-block;
+           font-family: "Arial";
+       }
+       div > span{
+            font-size: 13px;
+            padding-left: 23px;
+            padding-right: 23px;
+            height: 25px;
+            text-align: center;
+            display: inline-block;
+            line-height: 25px;
+            margin: 0px;
+            float: left;
+            cursor: pointer;
+       }
+       div > span.active{
+            background-color: rgb(0, 122, 255);
+            color: white;
+       }
+    </style>
+    <div>
+        <span id="on" class="active">On</span>
+        <span id="off" >Off</span>
+    </div>
+</template>
+<script>
+    'use strict';
+    ((customElements, document) => {
+        class ButtonToggle extends HTMLElement {
+
+            constructor() {
+                super();
+
+                this.status = 1;
+                this.toogleEvent = this.toogleEvent.bind(this);
+
+                const shadowRoot = this.attachShadow({
+                    mode: 'open'
+                });
+
+
+                const link = document.querySelector('#template_Button');
+
+                // Clone the <template> in the import.
+                const template = link.import.querySelector('template');
+                const clone = document.importNode(template.content, true);
+
+                this.spans = clone.querySelectorAll('span');
+
+                this.spans[0].addEventListener('click', this.toogleEvent);
+                this.spans[1].addEventListener('click', this.toogleEvent);
+
+                shadowRoot.appendChild(clone);
+
+            }
+
+            toogleEvent(event){
+                if(event.target.id !== this.status){
+                    this.status = event.target.id;
+                    for(const span of this.spans){
+                        span.classList.toggle('active');
+                    }
+                    this.dispatchEvent(new CustomEvent('toggle', {
+                        bubbles: true,
+                        composed: true
+                    }));
+                }
+            }
+        }
+        customElements.define('button-toggle', ButtonToggle);
+    })(window.customElements, document);
+</script>

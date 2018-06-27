@@ -1,0 +1,65 @@
+  <template>
+   <style>
+       ul{
+           box-shadow: 1px 1px 10px 0 #d8d8d8;
+           list-style-type: none;
+           font-family: "Arial";
+           width: 20%;
+       }
+       li{
+           background-color: aliceblue;
+           border: 1px solid #AAA;
+           color: #333;
+       }
+       .hideList{
+           display: none;
+       }
+    </style>
+    <ul></ul>
+</template>
+<script>
+'use strict';
+((customElements, document) => {
+    class LigthList extends HTMLElement {
+
+        constructor() {
+
+            super();
+
+            const shadowRoot = this.attachShadow({
+                mode: 'open'
+            });
+
+
+            const link = document.querySelector('#template_List');
+
+            // Clone the <template> in the import.
+            const template = link.import.querySelector('template');
+            const clone = document.importNode(template.content, true);
+
+
+            const list = clone.querySelector('ul');
+
+
+            let items = this.getAttribute('items');
+            items = JSON.parse(items);
+
+            for (const item of items) {
+                let li = document.createElement('li');
+                li.textContent = item;
+                list.appendChild(li);
+            }
+
+            shadowRoot.appendChild(clone.querySelector('style'));
+            shadowRoot.appendChild(list);
+
+
+            this.addEventListener('toggle', () => {
+
+                list.classList.toggle('hideList');
+            });
+        }
+    }
+    customElements.define('light-list', LigthList);
+})(window.customElements, document);
+</script>

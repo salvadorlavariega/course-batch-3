@@ -1,0 +1,189 @@
+<custom-style>
+    cells-molecule-grid-list{
+    border:1px solid red;
+    --cells-molecule-grid-list-icons-color: red;
+    --cells-molecule-link-icon {
+    }
+    }
+    --cells-molecule-link-icon: { color: var(--cells-molecule-grid-list-icons-color, #fff); justify-content: center;
+    -webkit-justify-content: center; -ms-flex-pack: center; flex-direction: column; -webkit-flex-direction: column;
+    -ms-flex-direction: column; @apply --cells-molecule-grid-list-icons; };
+</custom-style>
+
+
+<dom-module id="cells-molecule-grid-list-styles">
+    <template>
+        <style>
+            :host {
+                --cells-molecule-link-icon: {
+                    color: var(--cells-molecule-grid-list-icons-color, #fff);
+                    justify-content: center;
+                    -webkit-justify-content: center;
+                    -ms-flex-pack: center;
+                    flex-direction: column;
+                    -webkit-flex-direction: column;
+                    -ms-flex-direction: column;
+                    @apply --cells-molecule-grid-list-icons;
+                };
+                --cells-molecule-link-icon-label: {
+                    text-overflow: none;
+                    white-space: normal;
+                    text-align: center;
+                    font-weight: lighter;
+                    margin-left: 0;
+                    margin-top: 10px;
+                    @apply --cells-molecule-grid-list-icons-label;
+                };
+                font-family: var(--cells-fontDefault, sans-serif);
+                @apply --cells-molecule-grid-list;
+            }
+
+            :host([columns="1"]:not([column-size-fixed])) .list__item {
+                width: calc(100% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="2"]:not([column-size-fixed])) .list__item {
+                width: calc(50% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="3"]:not([column-size-fixed])) .list__item {
+                width: calc(33.33333% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="4"]:not([column-size-fixed])) .list__item {
+                width: calc(25% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="5"]:not([column-size-fixed])) .list__item {
+                width: calc(20% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="6"]:not([column-size-fixed])) .list__item {
+                width: calc(16.66667% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="7"]:not([column-size-fixed])) .list__item {
+                width: calc(14.28571% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="8"]:not([column-size-fixed])) .list__item {
+                width: calc(12.5% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="9"]:not([column-size-fixed])) .list__item {
+                width: calc(11.11111% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="10"]:not([column-size-fixed])) .list__item {
+                width: calc(10% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="11"]:not([column-size-fixed])) .list__item {
+                width: calc(9.09091% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            :host([columns="12"]:not([column-size-fixed])) .list__item {
+                width: calc(8.33333% - var(--cells-molecule-grid-list-margin, -1px));
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                overflow: hidden;
+                @apply --cells-molecule-grid-list-wrapper;
+            }
+
+            .list__item {
+                margin-top: -1px;
+                margin-left: -1px;
+                @apply --cells-molecule-grid-list-item;
+            }
+
+            .link__item {
+                margin: 0;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-justify-content: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+                text-align: center;
+                -webkit-flex-direction: column;
+                -ms-flex-direction: column;
+                flex-direction: column;
+                padding: 2em 1em 1em 1em;
+                position: relative;
+                color: var(--cells-molecule-grid-link-item-color, #fff);
+                text-decoration: none;
+                min-height: var(--cells-molecule-grid-list-link-item-min-height, 120px);
+                @apply --cells-molecule-grid-link-item;
+            }
+
+            .link__item:focus {
+                background: var(--cells-molecule-grid-link-item-focus-background-color, #043263);
+                @apply --cells-molecule-grid-link-item-focus;
+            }
+
+            .container {
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-flex-direction: row;
+                -ms-flex-direction: row;
+                flex-direction: row;
+                -webkit-flex-wrap: wrap;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
+                padding-left: 1px;
+                padding-top: 1px;
+                margin: -1px;
+                list-style: none;
+                background-color: var(--cells-molecule-grid-container-background-color, #004481);
+                width: 100%;
+                @apply --cells-molecule-grid-container;
+            }
+
+            :host([with-borders]) .list__item {
+                border: 1px solid var(--cells-molecule-grid-list-with-borders-border-color, #043263);
+            }
+
+            :host([with-borders]) .container {
+                margin: 0;
+            }
+
+            :host([border-inside]) .list__item {
+                border: 1px solid var(--cells-molecule-grid-list-border-inside-border-color, rgb(4,50,99));
+            }
+
+            :host([column-size-fixed]) {
+                @apply --cells-molecule-grid-list-column-size-fixed;
+            }
+
+            :host([column-size-fixed]) .list {
+                margin: 0 auto;
+                border: 0;
+                @apply --cells-molecule-grid-list-column-size-fixed-list;
+            }
+
+            :host([column-size-fixed]) .list__item {
+                width: var(--cells-molecule-grid-list-column-size-fixed-width);
+                margin: var(--cells-molecule-grid-list-column-size-fixed-margin);
+            }
+
+        </style>
+    </template>
+</dom-module>

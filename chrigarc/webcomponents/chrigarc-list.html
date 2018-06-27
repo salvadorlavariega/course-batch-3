@@ -1,0 +1,32 @@
+<script>
+    'use strict';
+    ((customElements) => {
+        class ChrigarcList extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const listElem = document.createElement('ul');
+                let elements = [];
+                try{
+                    elements = JSON.parse(this.getAttribute('elements').replace(/'/g, '"'));
+                }catch(exception){
+
+                }
+                this._addElements(elements, listElem);
+                shadowRoot.appendChild(listElem);
+            }
+
+            _addElements(elements, list, clean = true){
+                if(clean){
+                    list.innerHTML = '';
+                }
+                for(const elem of elements){
+                    const itemElem = document.createElement('li');
+                    itemElem.innerText = elem;
+                    list.appendChild(itemElem);
+                }
+            }
+        }
+        customElements.define('chrigarc-list', ChrigarcList);
+    })(window.customElements, document);
+</script>

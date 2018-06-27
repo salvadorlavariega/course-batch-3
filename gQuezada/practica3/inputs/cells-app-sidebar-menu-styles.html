@@ -1,0 +1,197 @@
+<dom-module id="cells-app-sidebar-menu-styles"><template><style>
+:host {
+  display: block;
+  font-family: var(--cells-fontDefault, --fontDefault);
+  box-sizing: border-box; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+:host {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: var(--cells-app-sidebar-menu-bg, --cells-KM13_colour);
+  @apply (--cells-fontDefaultLight);
+  @apply (--cells-text-size-m-maxi);
+  @apply (--cells-app-sidebar-menu); }
+  :host.aligned {
+    position: absolute;
+    top: 0;
+    bottom: 0; }
+  :host:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    box-shadow: 0 0 13px 13px rgba(0, 0, 0, 0.36);
+    @apply (--cells-app-sidebar-menu__edge-shadow); }
+  :host[align="left"] {
+    left: 0;
+    right: auto; }
+    :host[align="left"]:after {
+      right: 0;
+      left: auto; }
+  :host[align="right"] {
+    left: auto;
+    right: 0; }
+    :host[align="right"]:after {
+      left: 0;
+      right: auto; }
+  :host .header,
+  :host .footer-buttons {
+    background-color: var(--cells-app-sidebar-menu-HeaderFooter-bg, --cells-navMenuBgDark_colour); }
+  :host .header {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    border-bottom: solid 1px #000;
+    overflow: hidden;
+    color: var(--cells-app-sidebar-menu-header-color, --cells-KMW_colour);
+    @apply (--cells-app-sidebar-menu-header); }
+    :host .header .logo-app--userTop {
+      -webkit-transform: scale(2) translate(24px, 1px);
+              transform: scale(2) translate(24px, 1px);
+      @apply (--cells-app-sidebar-menu-header__logo-app--userTop); }
+    :host .header__user-container {
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1; }
+      :host .header__user-container__last-login {
+        text-align: center;
+        @apply (--cells-fontSecondaryLight);
+        @apply (--cells-text-size-m-mini);
+        @apply (--cells-app-sidebar-menu-header__user-container__last-login); }
+  :host .nav-links {
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    overflow: hidden;
+    overflow-y: auto;
+    margin-bottom: 65px;
+    @apply (--cells-app-sidebar-menu-nav-links); }
+    :host .nav-links .nav-links__link {
+      min-height: var(--cells-app-sidebar-menu-nav-links__link-min-height, --cells-height--m);
+      padding-left: 1rem;
+      color: var(--cells-app-sidebar-menu-nav-links__link-color, --cells-KMW_colour);
+      @apply (--cells-text-size-m-maxi);
+      @apply (--cells-app-sidebar-menu-nav-links__link); }
+      :host .nav-links .nav-links__link:active {
+        background-color: var(--cells-app-sidebar-menu-nav-links__link-active-bg, --cells-KMB_colour);
+        @apply (--cells-app-sidebar-menu-nav-links__link--active); }
+  :host p {
+    color: var(--cells-app-sidebar-menu-paragraph-color, --cells-KMW_colour);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer; }
+  :host .user {
+    padding: 0 1rem;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+    @apply (--cells-app-sidebar-menu-user); }
+    :host .user--top {
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+      margin: 0.3125rem 0.625rem;
+      @apply (--cells-app-sidebar-menu-user--top); }
+    :host .user-avatar {
+      display: block;
+      margin-right: 0.75rem;
+      width: auto;
+      height: 45px;
+      border-radius: 50%;
+      @apply (--cells-app-sidebar-menu-user__avatar); }
+    :host .user-text {
+      color: var(--cells-app-sidebar-menu-user-text-color, --cells-KMW_colour); }
+      :host .user-text > span {
+        display: block; }
+    :host .user-name {
+      @apply (--cells-fontDefaultLight);
+      @apply (--cells-text-size-m-mini);
+      @apply (--cells-app-sidebar-menu-user__name); }
+    :host .user-welcome {
+      @apply (--cells-fontDefaultLight);
+      @apply (--cells-text-size-m-mini);
+      color: var(--cells-app-sidebar-menu-user-welcome-color, --cells-KM9_colour);
+      @apply (--cells-app-sidebar-menu-user__welcome); }
+    :host .user-profile {
+      @apply (--cells-fontDefaultLight);
+      @apply (--cells-text-size-xs);
+      color: var(--cells-app-sidebar-menu-user-profile-color, --cells-userProfile_colour);
+      @apply (--cells-app-sidebar-menu-user__profile); }
+      :host .user-profile:after {
+        content: " \3e";
+        display: inline;
+        @apply (--cells-app-sidebar-menu-user__profile--after); }
+  :host .footer-buttons {
+    width: 100%;
+    min-height: 65px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    @apply (--cells-app-sidebar-menu-footer); }
+    :host .footer-buttons a {
+      text-decoration: none; }
+    :host .footer-buttons__user-container {
+      width: inherit;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex; }
+    :host .footer-buttons__button p {
+      margin: 0; }
+    :host .footer-buttons__button:active {
+      background-color: var(--cells-app-sidebar-menu-login__button-active-bg, --cells-KMB_colour); }
+    :host .footer-buttons__button:focus {
+      outline: 0; }
+    :host .footer-buttons .login {
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex; }
+      :host .footer-buttons .login__out {
+        border-left: 1px solid var(--cells-app-sidebar-menu-login__out-divider-color, --cells-KM1_colour);
+        text-align: center;
+        @apply (--cells-app-sidebar-menu-login__buttons__out); }
+      :host .footer-buttons .login__out, :host .footer-buttons .login__in {
+        padding: 0 1rem;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+        @apply (--cells-app-sidebar-menu-login__buttons); }
+      :host .footer-buttons .login__icon-out {
+        display: block; }
+      :host .footer-buttons .login__icon-in {
+        margin-right: 0.75rem;
+        @apply (--cells-app-sidebar-menu-login__buttons__icon-login); }
+      :host .footer-buttons .login__logout-text {
+        @apply (--cells-fontSecondaryLight);
+        @apply (--cells-text-size-xs);
+        @apply (--cells-app-sidebar-menu-login__logout-text); }
+
+</style></template></dom-module>

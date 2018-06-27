@@ -1,0 +1,175 @@
+<dom-module id="cells-calendar-styles"><template><style>
+:host {
+  box-sizing: border-box;
+  font-family: var(--cells-fontDefault, sans-serif);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  @apply --layout;
+  @apply --cells-calendar; }
+
+:host([hidden]), [hidden] {
+  display: none; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+.container {
+  box-shadow: var(--cells-calendar-container-box-shadow, 0 1px 4px 0 rgba(0, 0, 0, 0.2));
+  /* comentario css puro*/
+  height: var(--cells-calendar-container-height, 310px);
+  margin: var(--cells-calendar-container-margin, auto);
+  max-width: var(--cells-calendar-container-max-width, 288px);
+  text-align: center;
+  @apply --layout-vertical;
+  @apply --cells-calendar-container; }
+
+.header {
+  text-align: center;
+  /* otro comentario css puro*/
+  border-bottom: var(--cells-calendar-header-border-bottom, 1px solid #E9E9E9);
+  @apply --layout-horizontal;
+  @apply --layout-around-justified;
+  @apply --cells-calendar-header; }
+  .header .combo {
+    text-align: left;
+    @apply --layout;
+    @apply --layout-center;
+    @apply --cells-calendar-header-combo; }
+    .header .combo vaadin-combo-box-light.combo-box {
+      --paper-input-container: { padding: var(--cells-calendar-combo-box-input-container-padding, 0 0 0 10px); @apply --cells-calendar-combo-box-input-container; };
+      --paper-input-container-input: { font-family: var(--cells-calendar-combo-box-input-container-input-font-family, sans-serif); font-size: var(--cells-calendar-combo-box-input-container-input-font-size, 15px); @apply --cells-calendar-combo-box-input-container-input; };
+      --paper-input-container-color: var(--cells-calendar-combo-box-input-color, #121212);
+      --paper-input-container-underline: { display: none; };
+      --paper-input-container-underline-focus: { display:none; }; }
+      .header .combo vaadin-combo-box-light.combo-box .toggle-button {
+        --paper-icon-button: { color: var(--cells-calendar-combo-box-button-color, #2A86CA); };
+        --paper-icon-button-hover: { color: var(--cells-calendar-combo-box-button-hover-color, #5BBEFF); };
+        --paper-icon-button-ink-color: var(--cells-calendar-combo-box-button-bg-color, transparent);
+        --paper-input-container-input: { cursor: pointer; }; }
+    .header .combo vaadin-combo-box-overlay:host {
+      border-radius: 1px;
+      border: 1px solid #E9E9E9;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); }
+  .header .controls {
+    -webkit-flex: 1 0 auto;
+            flex: 1 0 auto;
+    height: var(--cells-calendar-header-controls-height, 54px);
+    @apply --layout;
+    @apply --layout-center;
+    @apply --layout-center-justified;
+    @apply --cells-calendar-header-controls; }
+    .header .controls .prev-btn {
+      --paper-icon-button: { color: var(--cells-calendar-header-controls-prev-button-color, #2A86CA); };
+      --paper-icon-button-hover: { color: var(--cells-calendar-header-controls-prev-button-hover-color, #5BBEFF); };
+      --paper-icon-button-ink-color: var(--cells-calendar-header-controls-prev-button-bg-color, transparent);
+      @apply --cells-calendar-header-controls-prev-btn; }
+    .header .controls .title {
+      cursor: var(--cells-calendar-header-controls-title-cursor, pointer);
+      font-size: var(--cells-calendar-header-controls-title-font-size, 13px);
+      font-weight: var(--cells-calendar-header-controls-title-font-weight, 500);
+      text-align: var(--cells-calendar-header-controls-title-text-align, center);
+      text-transform: var(--cells-calendar-header-controls-title-text-transform, uppercase);
+      @apply --cells-calendar-header-controls-title; }
+    .header .controls .next-btn {
+      --paper-icon-button: { color: var(--cells-calendar-header-controls-next-button-color, #2A86CA); };
+      --paper-icon-button-hover: { color: var(--cells-calendar-header-controls-next-button-hover-color, #5BBEFF); };
+      --paper-icon-button-ink-color: var(--cells-calendar-header-controls-next-button-bg-color, transparent);
+      @apply --cells-calendar-header-controls-next-btn; }
+
+.main {
+  height: 100%;
+  padding-left: var(--cells-calendar-main-padding-left, 5px);
+  padding-right: var(--cells-calendar-main-padding-right, 5px);
+  @apply --layout-horizontal;
+  @apply --layout-wrap;
+  @apply --layout-justified;
+  @apply --cells-calendar-main; }
+  .main .element {
+    box-shadow: none;
+    cursor: var(--cells-calendar-main-element-cursor, pointer);
+    height: var(--cells-calendar-main-element-height, 23px);
+    font-size: var(--cells-calendar-main-element-font-size, 13px);
+    line-height: var(--cells-calendar-main-element-line-height, 23px);
+    margin: var(--cells-calendar-main-element-margin, 6px 7px);
+    outline: 0;
+    width: var(--cells-calendar-main-element-width, 23px);
+    transition: var(--cells-calendar-main-element-transition, font-weight 0.3s ease-out);
+    @apply --cells-calendar-main-elements; }
+    .main .element.days {
+      border-radius: var(--cells-calendar-main-element-days-border-radius, 50%);
+      width: var(--cells-calendar-main-element-days-width, 23px);
+      @apply --cells-calendar-main-element-days; }
+    .main .element.today {
+      background-color: var(--cells-calendar-main-element-days-today-bg-color, transparent);
+      border: var(--cells-calendar-main-element-days-today-border, 1px solid #2a86cA);
+      @apply --cells-calendar-main-element-days-today; }
+    .main .element.hiddenDay {
+      cursor: default;
+      width: var(--cells-calendar-main-element-days-width, 23px); }
+      .main .element.hiddenDay:hover {
+        background-color: transparent; }
+    .main .element.months {
+      border-radius: var(--cells-calendar-main-element-months-border-radius, 4px);
+      margin: var(--cells-calendar-main-element-months-margin, 18px auto);
+      width: var(--cells-calendar-main-element-months-width, 80px);
+      @apply --cells-calendar-main-element-months; }
+    .main .element.years {
+      border-radius: var(--cells-calendar-main-element-years-border-radius, 4px);
+      margin: var(--cells-calendar-main-element-margin, 3px 6px);
+      width: var(--cells-calendar-main-element-years-width, 60px);
+      @apply --cells-calendar-main-element-years; }
+    .main .element.day-highlighted-class {
+      font-weight: var(--cells-calendar-main-element-day-highlighted-font-weight, 700);
+      @apply --cells-calendar-main-element-days-highlighted; }
+    .main .element.selected {
+      background-color: var(--cells-calendar-main-element-selected-bg-color, #5bbeff);
+      color: var(--cells-calendar-main-element-selected-color, #ffffff);
+      font-weight: var(--cells-calendar-main-element-selected-font-weight, 700);
+      @apply --cells-calendar-main-element-selected; }
+      .main .element.selected:hover {
+        background-color: var(--cells-calendar-main-element-selected-hover-bg-color, #5bbeff);
+        border: var(--cells-calendar-main-element-selected-hover-border, 1px solid #2a86cA);
+        color: var(--cells-calendar-main-element-selected-hover-color, #ffffff); }
+    .main .element:hover {
+      background-color: var(--cells-calendar-main-element-hover-bg-color, transparent);
+      color: var(--cells-calendar-main-element-hover-color, #121212);
+      font-weight: var(--cells-calendar-main-element-hover-font-weight, 700);
+      transition: var(--cells-calendar-main-element-hover-transition, font-weight 0.3s ease-out);
+      @apply --cells-calendar-main-element-hover; }
+    .main .element.weekdays {
+      background-color: var(--cells-calendar-main-element-weekdays-bg-color, transparent);
+      color: var(--cells-calendar-main-element-weekdays-color, #bdbdbd);
+      cursor: default;
+      font-weight: var(--cells-calendar-main-element-weekdays-font-weight, 500);
+      width: var(--cells-calendar-main-element-weekdays-width, 23px);
+      @apply --cells-calendar-main-element-weekdays; }
+
+@media screen and (min-width: 37.5em) {
+  .container {
+    height: var(--cells-calendar-sm-container-height, 370px);
+    max-width: var(--cells-calendar-sm-container-max-width, 600px);
+    width: var(--cells-calendar-sm-container-width, 380px);
+    @apply --cells-calendar-sm-container; }
+  .main {
+    padding-left: var(--cells-calendar-sm-main-padding-left, 15px);
+    padding-right: var(--cells-calendar-sm-main-padding-right, 15px); }
+    .main .element {
+      height: var(--cells-calendar-sm-main-element-height, 30px);
+      line-height: var(--cells-calendar-sm-main-element-line-height, 30px);
+      width: var(--cells-calendar-sm-main-element-width, 30px);
+      @apply --cells-calendar-sm-main-elements; }
+      .main .element.days {
+        width: var(--cells-calendar-sm-main-element-days-width, 30px);
+        @apply --cells-calendar-sm-main-element-days; }
+      .main .element.hiddenDay {
+        width: var(--cells-calendar-sm-main-element-days-width, 30px); }
+      .main .element.months {
+        width: var(--cells-calendar-sm-main-element-months-width, 100px);
+        @apply --cells-calendar-sm-main-element-months; }
+      .main .element.weekdays {
+        width: var(--cells-calendar-sm-main-element-weekdays-width, 30px);
+        @apply --cells-calendar-sm-main-element-weekdays; } }
+
+</style></template></dom-module>

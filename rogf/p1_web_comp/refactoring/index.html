@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title of the document</title>
+
+        <link rel="import" id="template_Button" href="Button.html">
+        <link rel="import" id="template_List" href="List.html">
+        
+        <style>
+            .hideList{
+               display: none;
+           }
+        </style>
+    </head>
+    <body>
+       
+        Lista que aparece y se oculta 
+        
+        <button-toggle></button-toggle>
+                
+        <light-list id="list" items='["PRINTSPAN","QUANTALIA","COMTREK","ZUVY","PIGZART","EVENTEX","FLOTONIC","MAXIMIND"]'></light-list>
+        
+        <script>
+            (()=>{
+                document.addEventListener('toggle',()=>{
+                    document.getElementById('list').classList.toggle('hideList');
+                });
+            })();
+        </script>
+    </body>
+</html>

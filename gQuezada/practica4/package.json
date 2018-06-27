@@ -1,0 +1,22 @@
+{
+  "name": "web-components",
+  "version": "1.0.0",
+  "description": "web component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gQuezada/course-batch-3.git"
+  },
+  "author": "Guillermo Quezada Martínez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gQuezada/course-batch-3/issues"
+  },
+  "homepage": "https://github.com/gQuezada/course-batch-3#readme",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}

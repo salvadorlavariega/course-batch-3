@@ -1,0 +1,59 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+    (() => {
+        class ChrigarcIf extends HTMLElement {
+
+            constructor() {
+                super();
+
+            }
+
+            connectedCallback() {
+                const shadowRoot = this.attachShadow({
+                    mode: 'open'
+                });
+
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.innerHTML = template.innerHTML;
+                this._ifCallback(shadowRoot, this.getAttribute('data-if'));
+            }
+
+            get dataIf(){
+                return dataIF;
+            }
+
+            set dataIf(newValue){
+                if(newValue === 'false' || newValue === 'true'){
+                    this.setAttribute('data-if', newValue);
+                }
+            }
+
+            static get observedAttributes(){
+                return ['data-if'];
+            }
+
+            attributeChangedCallback(name,myOldValue,myNewValue){
+                switch (name){
+                    case 'data-if':
+                        this._ifCallback(this.shadowRoot, myNewValue);
+                        break;
+                }
+            }
+
+            _ifCallback(shadowRoot, newValue){
+                if(shadowRoot && newValue &&(newValue === 'false' || newValue === 'true')){
+                    if(newValue === 'false'){
+                        this.setAttribute('data-content', shadowRoot.innerHTML);
+                        shadowRoot.innerHTML = '';
+                    }else if(newValue === 'true'){
+                        shadowRoot.innerHTML = this.getAttribute('data-content');
+                    }
+                }
+            }
+        }
+        customElements.define('chrigarc-if', ChrigarcIf);
+    })(window.customElements, document);
+</script>

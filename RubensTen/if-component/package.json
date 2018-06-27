@@ -1,0 +1,19 @@
+{
+  "name": "if-component",
+  "version": "1.0.0",
+  "description": "if component",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "if",
+    "component"
+  ],
+  "author": "Ruben Perez",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}

@@ -1,0 +1,255 @@
+<dom-module id="cells-geolocation-map-styles"><template><style>
+@charset "UTF-8";
+:host {
+  display: block;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+  font-family: var(--cells-fontDefault, sans-serif);
+  @apply --cells-geolocation-map; }
+
+:host([hidden]), [hidden] {
+  display: none !important; }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+/**
+ * Empty mixins to set outline for :focus and :active states.
+ * These mixins are meant to be set in an application's theme.
+ * --cells-global-focus, --cells-global-active
+ */
+*:focus {
+  @apply --cells-global-focus; }
+
+*:active {
+  @apply --cells-global-active; }
+
+button:active {
+  @apply --cells-global-active; }
+
+/**
+ * Empty mixins to set cells-molecule-input look and feel properties
+**/
+:host {
+  --cells-molecule-input-button-color: var(--cells-geolocation-map-input-button-color, #b6e6f8);
+  --cells-molecule-input-icon-button-size: var(--cells-geolocation-map-input-icon-button-size, 2rem);
+  --cells-molecule-input-background-color: var(--cells-geolocation-map-input-background-color, white);
+  --cells-molecule-input-top: var(--cells-geolocation-map-input-top, 1rem);
+  --cells-molecule-input-field-label: { border-bottom: var(--cells-geolocation-map-input-field-label-border-bottom, none); };
+  --cells-molecule-input: { width: var(--cells-geolocation-map-input-height, 90%); position: var(--cells-geolocation-map-input-position, absolute); z-index: var(--cells-geolocation-map-input-z-index, 1); top: var(--cells-molecule-input-top); left: var(--cells-geolocation-map-input-left, 5%); box-shadow: var(--cells-geolocation-map-input-box-shadox, 0 8px 6px -6px rgba(0,0,0,0.50)); border-radius: var(--cells-geolocation-map-input, 3px); };
+  --cells-molecule-input-withcontent-field-input: { width: var(--cells-geolocation-map-input-withcontent-field-input, 97%); font-weight: var(--cells-geolocation-map-input-withcontent-field-input-font-weight, normal); height: var(--cells-geolocation-map-input-withcontent-field-input-height, 32px); padding: var(--cells-geolocation-map-input-withcontent-field-input-padding, 20px 0 20px 10px); font-size: var(--cells-geolocation-map-input-withcontent-field-input-font-size, 16px); border-bottom: var(--cells-geolocation-map-input-withcontent-field-input-border-bottom, none); left: var(--cells-geolocation-map-input-withcontent-field-input-left, 10px); }; }
+
+google-map-marker {
+  display: block; }
+
+.centeredMarker {
+  position: absolute;
+  background: var(--cells-geolocation-map-marker-background, url(images/location-pin.svg) no-repeat);
+  top: 50%;
+  left: 46.1%;
+  z-index: 0;
+  margin-top: -44px;
+  height: 45px;
+  width: 27px;
+  -webkit-animation-name: bounce;
+          animation-name: bounce;
+  -webkit-animation-duration: 3s;
+          animation-duration: 3s; }
+  .centeredMarker .pulse {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    height: 14px;
+    width: 14px;
+    position: absolute;
+    left: 52%;
+    top: 100%;
+    margin: -8px 0px 0px -7px;
+    -webkit-transform: rotateX(55deg);
+            transform: rotateX(55deg);
+    z-index: 1;
+    -webkit-animation: lilshadow;
+            animation: lilshadow;
+    -webkit-animation-duration: 3s;
+            animation-duration: 3s; }
+    .centeredMarker .pulse:after {
+      content: '';
+      border-radius: 50%;
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      margin: -13px 0 0 -13px;
+      -webkit-animation: pulsate 1s ease-out;
+              animation: pulsate 1s ease-out;
+      -webkit-animation-iteration-count: infinite;
+              animation-iteration-count: infinite;
+      opacity: 0.0;
+      box-shadow: 0 0 1px 2px #cacaca;
+      -webkit-animation-delay: 2.5s;
+              animation-delay: 2.5s; }
+
+.search-input  {
+  -webkit-animation-name: inputmove;
+          animation-name: inputmove;
+  -webkit-animation-duration: .5s;
+          animation-duration: .5s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards; }
+
+@-webkit-keyframes inputmove {
+  from {
+    top: var(--cells-molecule-input-top); }
+  to {
+    top: -5rem; } }
+
+@keyframes inputmove {
+  from {
+    top: var(--cells-molecule-input-top); }
+  to {
+    top: -5rem; } }
+
+.search-input-back  {
+  -webkit-animation-name: inputback;
+          animation-name: inputback;
+  -webkit-animation-duration: .5s;
+          animation-duration: .5s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards; }
+
+@-webkit-keyframes inputback {
+  from {
+    top: -5rem; }
+  to {
+    top: var(--cells-molecule-input-top); } }
+
+@keyframes inputback {
+  from {
+    top: -5rem; }
+  to {
+    top: var(--cells-molecule-input-top); } }
+
+.target-move {
+  -webkit-animation-name: targetMove;
+          animation-name: targetMove;
+  -webkit-animation-duration: .5s;
+          animation-duration: .5s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards; }
+
+@-webkit-keyframes targetMove {
+  from {
+    right: 1rem; }
+  to {
+    right: -5rem; } }
+
+@keyframes targetMove {
+  from {
+    right: 1rem; }
+  to {
+    right: -5rem; } }
+
+.target-move-back {
+  -webkit-animation-name: targetMoveBack;
+          animation-name: targetMoveBack;
+  -webkit-animation-duration: .5s;
+          animation-duration: .5s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards; }
+
+@-webkit-keyframes targetMoveBack {
+  from {
+    right: -5rem; }
+  to {
+    right: 1rem; } }
+
+@keyframes targetMoveBack {
+  from {
+    right: -5rem; }
+  to {
+    right: 1rem; } }
+
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.1, 0.1);
+            transform: scale(0.1, 0.1);
+    opacity: 0.0; }
+  50% {
+    opacity: 1.0; }
+  100% {
+    -webkit-transform: scale(1.2, 1.2);
+            transform: scale(1.2, 1.2);
+    opacity: 0; } }
+
+@keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.1, 0.1);
+            transform: scale(0.1, 0.1);
+    opacity: 0.0; }
+  50% {
+    opacity: 1.0; }
+  100% {
+    -webkit-transform: scale(1.2, 1.2);
+            transform: scale(1.2, 1.2);
+    opacity: 0; } }
+
+@-webkit-keyframes lilshadow {
+  0% {
+    opacity: 0.0; }
+  90% {
+    opacity: 0.0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes lilshadow {
+  0% {
+    opacity: 0.0; }
+  90% {
+    opacity: 0.0; }
+  100% {
+    opacity: 1; } }
+
+@-webkit-keyframes bounce {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-10000px);
+            transform: translateY(-10000px); }
+  70% {
+    opacity: 1;
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px); }
+  90% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px); }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0); } }
+
+@keyframes bounce {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-10000px);
+            transform: translateY(-10000px); }
+  70% {
+    opacity: 1;
+    -webkit-transform: translateY(30px);
+            transform: translateY(30px); }
+  90% {
+    -webkit-transform: translateY(-10px);
+            transform: translateY(-10px); }
+  100% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0); } }
+
+iron-icon {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  right: 1rem;
+  top: 6rem;
+  background: white;
+  border: 2px solid white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.5);
+  z-index: 1; }
+
+</style></template></dom-module>

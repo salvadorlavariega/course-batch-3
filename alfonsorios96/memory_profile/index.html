@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<button id="grow">Crear nodos</button>
+<script>
+  var x = [];
+
+  function grow() {
+    for (var i = 0; i < 10000; i++) {
+      document.body.appendChild(document.createElement('div'));
+    }
+    x.push(new Array(1000000).join('x'));
+  }
+
+  document.getElementById('grow').addEventListener('click', grow);
+</script>
+</body>
+</html>

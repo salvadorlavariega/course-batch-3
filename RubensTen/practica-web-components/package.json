@@ -1,0 +1,19 @@
+{
+  "name": "practica-web-components",
+  "version": "1.0.0",
+  "description": "native web components ",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web",
+    "component"
+  ],
+  "author": "Rubén Pérez",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.11.1"
+  }
+}

@@ -1,0 +1,34 @@
+<template id="contentElement">
+    <ul class="list"></ul>
+</template>
+<script>
+    ((customElements, document) => {
+        'use strict';
+        class PrintItemsElement extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({
+                    mode: 'open'
+                });
+                const template = document.currentScript.ownerDocument.querySelector('#contentElement');
+                const itemsAttribute = this.getAttribute('items');
+                this.renderItems(template.content, JSON.parse(itemsAttribute));
+                shadowRoot.appendChild(document.importNode(template.content, true));
+            }
+
+            renderItems(html, arrayItems) {                
+                const ul = html.querySelector('ul');
+                ul.innerHTML = this.generateHTMLItems(arrayItems);
+            }
+
+            generateHTMLItems(arrayItems) {
+                let items = '';
+                for(const i in arrayItems){
+                    items += `<li>${arrayItems[i]}</li>`;
+                }
+                return items;
+            }
+        }
+        customElements.define('print-items-element', PrintItemsElement);
+    })(window.customElements, document);
+</script>

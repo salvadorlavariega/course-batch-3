@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id="create">Create !</button>
+<script>
+  let detachedNodes;
+
+  const create = () => {
+    const ul = document.createElement('ul');
+    for (let i = 0; i < 10; i++) {
+      const li = document.createElement('li');
+      ul.appendChild(li);
+    }
+    detachedTree = ul;
+  };
+
+  document.getElementById('create').addEventListener('click', create);
+</script>
+</body>
+</html>
