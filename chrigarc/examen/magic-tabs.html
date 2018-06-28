@@ -1,17 +1,37 @@
 <template>
 
     <style>
+        ul{
+            display: inline;
+        }
         li {
+            color: var(--item-list-color, white);
             list-style: none;
             display: inline;
             padding: 10px;
+
         }
+
+        li.active{
+            background: var(--item-active-list-background, #d8d8d8);
+            color: var(--item-active-list-color, black);
+        }
+
+        #buttons_area {
+            background: var(--buttons-background, blue);
+            color: var(--buttons-color, black);
+        }
+
+        #content_area {
+            background: var(--area-background, #dddddd);
+        }
+
     </style>
 
     <div id="buttons_area">
-        <button id="btn_left"> < </button>
+        <button id="btn_left" style="float: left;"> < </button>
         <ul id="tabs_list"></ul>
-        <button id="btn_right"> > </button>
+        <button id="btn_right" style="float: right;"> > </button>
     </div>
     <div id="content_area"></div>
 </template>
@@ -35,7 +55,7 @@
             }
 
             set tabs(newValue){
-                this.setAttribute('tabs', JSON.stringify(newValue));
+                this.setAttribute('tabs', newValue);
             }
 
             get current(){
@@ -133,11 +153,11 @@
                     listNode.appendChild(itemList);
                 }
                 if((tabsArray.length -  this.scrollIndex) > this.tabsLimit){
-                    btnRight.style.display = 'block';
+                    btnRight.style.display = 'inline';
                 }
 
                 if( (tabsArray.length - this.scrollIndex) < tabsArray.length){
-                    btnLeft.style.display = 'block';
+                    btnLeft.style.display = 'inline';
                 }
             }
 
@@ -145,7 +165,10 @@
                 const contentArea = this.shadowRoot.querySelector('#content_area');
                 const tabsArray = this.tabs;
                 let currentIndex = this.current;
-                contentArea.innerHTML = tabsArray[currentIndex].content;
+                contentArea.innerHTML  = '';
+                if(tabsArray[currentIndex]){
+                    contentArea.innerHTML = tabsArray[currentIndex].content;
+                }
             }
 
             _selectTab(event){
@@ -156,6 +179,10 @@
                 const contentArea = this.shadowRoot.querySelector('#content_area');
                 const index = Number.parseInt(event.target.getAttribute('data-index'));
                 this.current = index;
+                this.dispatchEvent(new CustomEvent('dom-changed', {
+                    bubbles: true,
+                    composed: true
+                }));
             }
 
         }
