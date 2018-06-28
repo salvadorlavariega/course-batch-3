@@ -1,0 +1,164 @@
+<template>
+
+    <style>
+        li {
+            list-style: none;
+            display: inline;
+            padding: 10px;
+        }
+    </style>
+
+    <div id="buttons_area">
+        <button id="btn_left"> < </button>
+        <ul id="tabs_list"></ul>
+        <button id="btn_right"> > </button>
+    </div>
+    <div id="content_area"></div>
+</template>
+
+<script>
+    ((customElements, document) => {
+        'use strict';
+        class MagicTabs extends HTMLElement{
+            constructor(){
+                super();
+                this.scrollIndex = 0;
+                this.tabsLimit = 5;
+            }
+
+            connectedCallback() {
+                this._templatize();
+            }
+
+            get tabs(){
+                return JSON.parse(this.getAttribute('tabs'));
+            }
+
+            set tabs(newValue){
+                this.setAttribute('tabs', JSON.stringify(newValue));
+            }
+
+            get current(){
+                let value = 0;
+                if(this.getAttribute('current')){
+                    value = Number.parseInt(this.getAttribute('current'));
+                }
+                return value;
+            }
+
+            set current(newValue){
+                if(Number.isInteger(newValue)){
+                    this.setAttribute('current', newValue);
+                }
+            }
+
+            static get observedAttributes() {
+                return [ 'tabs', 'current' ];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                switch (name){
+                    case 'current':
+                        if(!Number.isInteger(Number.parseInt(newValue))){
+                            this.current = 0;
+                        }
+                        break;
+                }
+                this._render(name);
+            }
+
+
+            _templatize() {
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                const templateContent = document.importNode(template.content, true);
+                shadowRoot.appendChild(templateContent);
+                const btnLeft = this.shadowRoot.querySelector('#btn_left');
+                const btnRigth = this.shadowRoot.querySelector('#btn_right');
+                btnLeft.addEventListener('click', () =>{
+                    if(this.scrollIndex > 0){
+                        this.scrollIndex--;
+                        this._renderTabs();
+                    }
+                    this.dispatchEvent(new CustomEvent('dom-changed', {
+                        bubbles: true,
+                        composed: true
+                    }));
+                });
+
+                btnRigth.addEventListener('click', () =>{
+                    if(this.scrollIndex < (this.tabs.length-5)){
+                        this.scrollIndex++;
+                        this._renderTabs();
+                    }
+                    this.dispatchEvent(new CustomEvent('dom-changed', {
+                        bubbles: true,
+                        composed: true
+                    }));
+                });
+                this._render('tabs');
+            }
+
+            _render(typeRender = 'all'){
+                if(this.shadowRoot && this.tabs){
+                    switch (typeRender){
+                        case 'tabs':
+                            this._renderTabs();
+                            this._renderContent();
+                            break;
+                        case 'current':
+                            this._renderContent();
+                            break;
+                    }
+                }
+            }
+
+            _renderTabs(){
+                const btnRight = this.shadowRoot.querySelector('#btn_right');
+                const btnLeft = this.shadowRoot.querySelector('#btn_left');
+                const listNode = this.shadowRoot.querySelector('#tabs_list');
+                btnRight.style.display = 'none';
+                btnLeft.style.display = 'none';
+                const tabsArray = this.tabs;
+                while (listNode.firstChild) {
+                    listNode.firstChild.removeEventListener('click', this._selectTab);
+                    listNode.removeChild(listNode.firstChild);
+                }
+
+                for(let i=this.scrollIndex; i< tabsArray.length && (i - this.scrollIndex)<this.tabsLimit; i++){
+                    const itemList = document.createElement('li');
+                    itemList.setAttribute('data-index', i);
+                    itemList.addEventListener('click', this._selectTab.bind(this));
+                    itemList.innerText = tabsArray[i].tab;
+                    listNode.appendChild(itemList);
+                }
+                if((tabsArray.length -  this.scrollIndex) > this.tabsLimit){
+                    btnRight.style.display = 'block';
+                }
+
+                if( (tabsArray.length - this.scrollIndex) < tabsArray.length){
+                    btnLeft.style.display = 'block';
+                }
+            }
+
+            _renderContent(){
+                const contentArea = this.shadowRoot.querySelector('#content_area');
+                const tabsArray = this.tabs;
+                let currentIndex = this.current;
+                contentArea.innerHTML = tabsArray[currentIndex].content;
+            }
+
+            _selectTab(event){
+                for(const listNode of this.shadowRoot.querySelector('#tabs_list').childNodes){
+                    listNode.classList.remove('active');
+                }
+                event.target.classList.add('active');
+                const contentArea = this.shadowRoot.querySelector('#content_area');
+                const index = Number.parseInt(event.target.getAttribute('data-index'));
+                this.current = index;
+            }
+
+        }
+        customElements.define('magic-tabs', MagicTabs);
+    })(window.customElements, document);
+</script>
