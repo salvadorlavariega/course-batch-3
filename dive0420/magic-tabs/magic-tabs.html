@@ -1,0 +1,56 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+    (()=>{
+        class MagicTabs extends HTMLElement{
+            constructor(){
+                super();
+            }
+
+            connectedCallback(){
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.appendChild(document.importNode(template.content, true));
+                const slotTemplate = this.shadowRoot.querySelector('slot');
+                const nodeAssinged = slotTemplate.assignedNodes();
+                this._extractNodesFromSlot(nodeAssinged);
+            }
+
+            set tabs(value){
+                return this.setAttribute('tabs', JSON.stringify(value));
+            }
+
+            get tabs(){
+                return this.getAttribute('tabs');
+            }
+
+            _extractNodesFromSlot(nodes){
+                for (const node of nodes){
+                    if(node.localName === 'template' && this.shadowRoot){
+                        //this.shadowRoot.appendChild(document.importNode(node.content, true));
+                        this_fillDivs(document.importNode(node.content, true));
+                    }
+                }
+            }
+
+            _setTabstitle(){
+
+            }
+
+            _fillDivs(nodes){
+                const titlesDiv = this.shadowRoot.querySelector('#title');
+                const titleDiv = document.createElement('div');
+                const title = document.createElement('span');
+                const contentDiv = document.createElement('div');
+                for(const tab of this.tabs){
+                    title.innerText = tab.tab;
+                    titlesDiv.appendChild(title);
+                    titlesDiv.appendChild(titleDiv);
+                }
+            }
+        }
+        window.customElements.define('magic-tabs', MagicTabs);
+    })();
+</script>
