@@ -1,0 +1,58 @@
+<template>
+   <slot></slot>
+</template>
+<script>
+    (() => {
+        class DomIf extends HTMLElement {
+
+            constructor(){
+                super();
+                this.if = 'false';
+            }
+
+            connectedCallback(){
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.appendChild(document.importNode(template.content, true));
+                const slot = this.shadowRoot.querySelector('slot');
+                this._extractNodes(slot.assignedNodes());
+
+
+            }
+
+
+            static get observedAttributes() {
+                return [ 'if' ];
+            }
+
+            attributeChangedCallback(name, oldVle, newValue){
+                if (name === 'if'){
+                    if(newValue === 'true'){
+                        this.style.display = 'block';
+                    } else {
+                        this.style.display = 'none';
+                    }
+                }
+            }
+
+            set if(value){
+                this.setAttribute('if', value);
+            }
+            get if(){
+                return this.getAttribute('if');
+            }
+
+            _extractNodes(nodes){
+                for(const node of nodes){
+                    if(node.localName === 'template'){
+                        this.shadowRoot.append(document.importNode(node.content, true));
+                    }
+                }
+            }
+
+        }
+
+        customElements.define('dom-if', DomIf);
+    })();
+
+</script>
