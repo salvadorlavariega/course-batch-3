@@ -150,6 +150,9 @@
                     itemList.setAttribute('data-index', i);
                     itemList.addEventListener('click', this._selectTab.bind(this));
                     itemList.innerText = tabsArray[i].tab;
+                    if(i === this.current){
+                        itemList.classList.add('active');
+                    }
                     listNode.appendChild(itemList);
                 }
                 if((tabsArray.length -  this.scrollIndex) > this.tabsLimit){
@@ -173,11 +176,12 @@
 
             _selectTab(event){
                 for(const listNode of this.shadowRoot.querySelector('#tabs_list').childNodes){
-                    listNode.classList.remove('active');
+                   listNode.classList.remove('active');
                 }
                 event.target.classList.add('active');
                 const contentArea = this.shadowRoot.querySelector('#content_area');
                 const index = Number.parseInt(event.target.getAttribute('data-index'));
+
                 this.current = index;
                 this.dispatchEvent(new CustomEvent('dom-changed', {
                     bubbles: true,
