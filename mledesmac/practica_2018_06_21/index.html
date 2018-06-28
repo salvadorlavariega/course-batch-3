@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Practica</title>
+    <link rel="import" href="toggle.html">
+    <link rel="import" href="list.html">
+</head>
+</head>
+<body>
+    <h1>Custom Element</h1>
+    <toggle-element></toggle-element>
+    <hr>
+    <list-element elements='["Prueba de concepto","Custom Elements"]' style="display: none"></list-element>
+
+
+    <script>
+        (() => {
+            const listCustomElement = document.querySelector('list-element');
+            document.addEventListener('show-event', () => {
+                if(listCustomElement.style.display === 'block'){
+                    listCustomElement.style.display = 'none';
+                }else{
+                    listCustomElement.style.display = 'block';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

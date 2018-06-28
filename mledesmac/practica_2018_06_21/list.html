@@ -1,0 +1,31 @@
+<script>
+    (function listElement(customElements, document) {
+        'use strict';
+
+        class ListElement extends HTMLElement {
+
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const atrributesFromComponent = this.getAttribute('elements');
+                const elements = JSON.parse(atrributesFromComponent);
+                const ulElement = document.createElement('ul');
+
+                this.createLIElements(elements, ulElement);
+                shadowRoot.appendChild(ulElement);
+
+            }
+
+            createLIElements(elements, ulElement) {
+                for(const element of  elements){
+                    let li = document.createElement('li');
+                    li.textContent = element;
+                    ulElement.appendChild(li);
+                }
+            };
+        }
+
+        customElements.define('list-element', ListElement);
+    })(window.customElements, document);
+
+</script>

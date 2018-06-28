@@ -1,0 +1,67 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+    (()=>{
+        class KarIf extends HTMLElement{
+            constructor(){
+                super();
+                this.if = 'false';
+            }
+
+            connectedCallback(){
+                const shadowRoot = this.attachShadow(
+                    {
+                        mode: 'open'
+                    }
+            );
+
+
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.appendChild(document.importNode(template.content,true));
+                const slottedTemplate = this.shadowRoot.querySelector('slot');
+                const slotNodes = slottedTemplate.assignedNodes();
+                this.getSlotNodes(slotNodes);
+
+            }
+
+            set if(newValue){
+                this.setAttribute('if',newValue);
+            }
+
+            get if(){
+                return this.getAttribute('if');
+            }
+
+            static get observedAttributes(){
+                return ['if'];
+            }
+
+            attributeChangedCallback(name,oldValue,newValue){
+                if(name === 'if'){
+                    if(newValue === 'true'){
+                        this.style.display = 'block';
+                    }
+                    else{
+                        this.style.display = 'none';
+                    }
+
+                }
+            }
+
+            getSlotNodes(nodeList){
+                for(const node of nodeList){
+                    if(node.localName === 'template' && this.shadowRoot){
+                        this.shadowRoot.append(document.importNode(node.content,true));
+                    }
+                }
+            }
+
+
+        }
+
+        window.customElements.define('kar-if',KarIf)
+    })
+    ();
+</script>
