@@ -1,0 +1,64 @@
+<template>
+    <slot></slot>
+</template>
+
+
+<script>
+    (() => {
+        class Domif extends HTMLElement {
+        constructor() {
+            super();
+            this.if = 'false';
+
+        }
+
+        connectedCallback() {
+            const shadowRoot = this.attachShadow({mode: 'open'});
+            const template = document.currentScript.ownerDocument.querySelector('template');
+            shadowRoot.appendChild(document.importNode(template.content, true));
+            const slotTempleta = this.shadowRoot.querySelector('slot');
+            const nodeAssigned  = slotTempleta.assignedNodes();
+            this.extractNodesFromSlote(nodeAssigned);
+
+        }
+
+        set if(newValue) {
+            this.setAttribute('if', newValue);
+        }
+
+        get if(){
+            return this.getAttribute('if');
+            // return this.if; // esto no se debe de hacer
+        }
+
+        static  get observedAttributes() {
+            return ['if'];
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            switch(name){
+                case 'if':  
+                            if(newValue === 'true')
+                                this.style.display = 'none';
+                            else 
+                                this.style.display = 'block';
+                    
+                break;
+            }
+        }
+
+        extractNodesFromSlote(nodeAssigned) {
+            for(const node of nodeAssigned) {
+                if(node.localName === 'template') {
+                    this.shadowRoot.appendChild(document.importNode(node.content, true));
+                } 
+            }
+        }
+
+
+    }
+    
+    window.customElements.define('dom-if', Domif);
+    })();
+   
+</script>
