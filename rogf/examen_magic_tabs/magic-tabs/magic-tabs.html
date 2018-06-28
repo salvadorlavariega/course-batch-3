@@ -1,0 +1,219 @@
+<template>
+   <style>
+       :host{
+           --arrows-bg-color: #DDD;
+           --tabs-bg-color:#FFF;
+           --tabs-color: rgb(0, 122, 255);
+           --tabs-bg-color-active: rgb(0, 122, 255);
+           --tabs-color-active: #FFF;
+       }
+       #container{
+           border-radius: 2px;
+           margin: 0 auto;
+           width: 60%;
+           font-family: 'Arial';
+       }
+       #tabs{
+           display: flex;
+           text-align: center;
+       }
+       
+       #tabs > div:nth-child(1), #tabs > div:nth-child(3){
+           width: 2.5%;
+           background-color: var(--arrows-bg-color);
+           cursor: pointer;
+       }
+       #tabs > div:nth-child(2){
+           width: 95%;
+           overflow: hidden;
+       }
+       #slider > div{
+           display: flex;
+           width: 100%;
+           transition: 0.6s ease-in-out;
+       }
+       #slider > div > div{
+           min-width: 20%;
+           overflow: auto;
+           flex-grow: 5;
+           color: var(--tabs-color);
+           background-color: var(--tabs-bg-color);
+           cursor: pointer;
+       }
+       #slider > div > div.activeTab{
+           background-color: var(--tabs-bg-color-active);
+           color: var(--tabs-color-active);
+       }
+       #content{
+            width: 100%;
+            min-height: 30%;
+            border: 1px solid #333;
+       }
+       #content > div{
+           margin: 1%;
+       }
+       .hiddenElement{
+           visibility: hidden;
+       }
+        @media only screen and (max-width : 480px) {
+             #tabs{
+                 flex-wrap: wrap;
+            }
+            #tabs > div{
+               width: 100% !important;
+           }
+        }
+    </style>
+    <div id="container">
+        <div id="tabs">
+            <div class="prev">&lt;</div>
+            <div id="slider">
+               <div></div>
+            </div>
+            <div class="next">&gt;</div>
+        </div>
+        <div id="content">
+            <div></div>
+        </div>
+    </div>
+</template>
+<script>
+    'use strict';
+    ((customElements, document) => {
+        class MagicTabs extends HTMLElement {
+
+            constructor() {
+                
+                super();
+                
+                this.prev = this.prev.bind(this);
+                this.next = this.next.bind(this);
+                this.configTabs = this.configTabs.bind(this);
+                this.displayArrows = this.displayArrows.bind(this);
+                this.displayTabContent = this.displayTabContent.bind(this);
+                
+                this.currentSlide = 0;
+                this.factorSlide = null;
+
+                let tmpl = document.currentScript.ownerDocument.querySelector('template');
+
+                let shadowRoot = this.attachShadow({
+                    mode: 'open'
+                });
+
+                shadowRoot.appendChild(tmpl.content.cloneNode(true));
+            }
+            
+            connectedCallback(){
+                
+                // Retrieve the initial tabs attribute data
+                this.data = JSON.parse(this.getAttribute('tabs'));
+                
+                // Add event listener for arrows
+                this.shadowRoot.querySelector('#tabs > .prev').addEventListener('click', this.prev);
+                this.shadowRoot.querySelector('#tabs > .next').addEventListener('click', this.next);
+                
+                this.configTabs();
+                this.displayArrows();
+            }
+            
+            static get observedAttributes() {
+                
+                return ['tabs'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {  
+
+                if (name === 'tabs') {            
+                    this.data = JSON.parse(newValue);
+                    this.configTabs();
+                    this.displayArrows();
+                }
+            }
+
+            get tabs() {
+                
+                return this.getAttribute('tabs');
+            }
+
+            set tabs(value) {
+                
+                this.setAttribute('tabs', value);
+            }
+            
+            configTabs(){
+                
+                // Calculate sizes used to slide tabs
+                if(this.data.length < 5){
+                    this.factorSlide = 100/this.data.length;
+                    this.factorSlide = this.factorSlide.toFixed(1);
+                }else{
+                    this.factorSlide = 20;
+                }
+                this.slides = this.data.length > 5 ? this.data.length- 5 : 0;
+                
+                // Generate tabs
+                let noTab = 1;
+                this.shadowRoot.querySelector('#slider > div').innerHTML = "";
+                for(const item of this.data){
+                    let tab = document.createElement('div');
+                    tab.innerHTML = item.tab;
+                    tab.setAttribute('data-tab', noTab)
+                    tab.addEventListener('click',this.displayTabContent);
+                    this.shadowRoot.querySelector('#slider > div').appendChild(tab);
+                    noTab++;
+                }
+                
+                // Set first tab by default
+                this.shadowRoot.querySelector('#slider > div > div:nth-child(1)').classList.add('activeTab');
+                this.shadowRoot.querySelector('#content > div').innerHTML = this.data[0].content; 
+            }
+            
+            displayTabContent(event){
+                
+                // Set the clicked tab as the active (style & content)
+                this.shadowRoot.querySelector('.activeTab').classList.remove('activeTab');
+                event.target.classList.add('activeTab');
+                this.shadowRoot.querySelector('#content > div').innerHTML = this.data[event.target.dataset.tab-1].content; 
+            }
+            
+            prev(){
+                
+                if(this.currentSlide > 0){
+                    this.currentSlide--;
+                    let style = `transform:translateX(-${this.factorSlide * this.currentSlide}%);`;
+                    this.shadowRoot.querySelector('#slider > div').setAttribute('style', style);
+                    this.displayArrows();
+                }
+            }
+            
+            next(){
+                
+                if(this.currentSlide < this.slides){
+                    this.currentSlide++;
+                    let style = `transform:translateX(-${this.factorSlide * this.currentSlide}%);`;
+                    this.shadowRoot.querySelector('#slider > div').setAttribute('style', style);
+                    this.displayArrows();
+                }
+            }
+            
+            displayArrows(){
+                
+                // Detect if prev arrow should be visible
+                if(this.currentSlide === 0){
+                    this.shadowRoot.querySelector('.prev').classList.add('hiddenElement');
+                }else{
+                    this.shadowRoot.querySelector('.prev').classList.remove('hiddenElement');
+                }
+                
+                // Detect if next arrow should be visible
+                if(this.currentSlide === this.slides){
+                    this.shadowRoot.querySelector('.next').classList.add('hiddenElement');
+                }else{
+                    this.shadowRoot.querySelector('.next').classList.remove('hiddenElement');
+                }
+            }
+        }
+        customElements.define('magic-tabs', MagicTabs);
+    })(window.customElements, document);
+</script>
