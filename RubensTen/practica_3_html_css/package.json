@@ -1,0 +1,19 @@
+{
+  "name": "practica_3_html_css",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec test/*.spec.js --watch"
+  },
+  "bin": {
+    "html": "./bin/cli.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "commander": "^2.15.1",
+    "mocha": "^5.2.0"
+  }
+}
