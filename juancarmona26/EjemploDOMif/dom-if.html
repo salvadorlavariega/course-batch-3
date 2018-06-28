@@ -49,7 +49,7 @@
 
         extractNodesFromSlote(nodeAssigned) {
             for(const node of nodeAssigned) {
-                if(node.localName === 'template') {
+                if(node.localName === 'template' && this.shadowRoot) {
                     this.shadowRoot.appendChild(document.importNode(node.content, true));
                 } 
             }
