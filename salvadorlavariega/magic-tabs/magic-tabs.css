@@ -1,0 +1,41 @@
+:host{
+    --tabs-hover-bg-color: #111111;
+    --tabs-background-color: #333333;
+    --tabs-active-color: #FFEB3B;
+    --container-gb-color: #839598;
+
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--tabs-background-color);
+}
+li {
+    float: left;
+}
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+
+}
+
+.active {
+    border-bottom: 3px solid var(--tabs-active-color);
+    opacity: 1;
+    animation: md-tab-ripple 0.2s linear forwards;
+}
+
+
+li a:hover {
+    background-color: var(--tabs-hover-bg-color);
+}
+
+div {
+    background-color: var(--container-gb-color);
+}

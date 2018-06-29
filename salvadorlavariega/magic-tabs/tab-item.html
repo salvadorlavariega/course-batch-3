@@ -1,0 +1,133 @@
+<template>
+    <link rel="stylesheet" href="magic-tabs.css">
+</template>
+<script>
+
+    ((customElements, document) => {
+        class TabItem extends HTMLElement {
+
+            constructor(){
+                super();
+            }
+
+            set name(value){
+                this.setAttribute('name', value);
+            }
+
+            get name(){
+                return this.getAttribute('name');
+            }
+
+            set content(value){
+                this.setAttribute('content', value);
+            }
+
+            get content(){
+                return this.getAttribute('content');
+            }
+
+            set width(value){
+                this.setAttribute('width', value);
+            }
+
+            get width(){
+                return this.getAttribute('width');
+            }
+
+            set active(value){
+                this.setAttribute('active', value);
+            }
+
+            get active(){
+                return this.getAttribute('active');
+            }
+            static get observedAttributes(){
+                return ['name','content','width','active'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue){
+                switch (name) {
+                    case 'name':
+                        if(this.shadowRoot){
+                            const aElm = this.shadowRoot.querySelector('a');
+                            aElm.innerHTML = newValue;
+                        }
+
+                        break;
+
+                    case 'content':
+                        this.dispatchEvent(new CustomEvent('tab-content-changed', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                contenido: this.content
+                            }
+                        }));
+                        break;
+
+                    case 'width':
+                        if(this.shadowRoot){
+                            const liElm = this.shadowRoot.querySelector('li');
+                            liElm.style.width = newValue + '%';
+                        }
+
+                        break;
+
+                    case 'active':
+                        this._setActiveTab(newValue);
+                        break;
+
+                }
+
+            }
+
+
+            connectedCallback(){
+                this._createShadowRoot();
+                this._createElement(this.name);
+                this.addEventListener('click', this._onClick.bind(this));
+            }
+
+
+            _createShadowRoot() {
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const template = document.querySelector('template');
+                shadowRoot.appendChild(document.importNode(template.content, true));
+            }
+
+            _createElement(name) {
+                const aElm = document.createElement('a');
+                const liElm = document.createElement('li');
+                liElm.style.width = this.getAttribute('width') + '%';
+                aElm.textContent = name;
+                liElm.appendChild(aElm);
+                this.shadowRoot.appendChild(liElm);
+            }
+
+            _setActiveTab(value){
+                const aElm = this.shadowRoot.querySelector('a');
+                if('true' === value){
+                    aElm.classList.add('active');
+                } else {
+                    aElm.removeAttribute('class');
+                }
+            }
+
+            _onClick(event) {
+                this.dispatchEvent(new CustomEvent('tab-clicked', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        contenido: this.content
+                    }
+                }));
+
+            }
+
+        }
+
+        customElements.define('tab-item', TabItem);
+    })(window.customElements, document.currentScript.ownerDocument);
+
+
+</script>
