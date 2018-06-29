@@ -1,0 +1,17 @@
+{
+  "name": "practica_2018_06_11",
+  "version": "1.0.0",
+  "description": "Analizador sintactico",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Mauricio Ledesma",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-fs": "^2.0.0",
+    "cheerio": "^1.0.0-rc.2",
+    "mocha": "^5.2.0"
+  }
+}

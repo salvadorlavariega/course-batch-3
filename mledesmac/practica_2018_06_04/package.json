@@ -1,0 +1,18 @@
+{
+  "name": "practica_2018_06_04",
+  "version": "1.0.0",
+  "description": "Unit Test Exercise",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "Mauricio Ledesma",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0"
+  }
+}

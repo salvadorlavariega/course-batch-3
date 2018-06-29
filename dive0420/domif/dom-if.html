@@ -1,0 +1,54 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+    (()=>{
+        class Domif extends HTMLElement {
+            constructor(){
+                super();
+                this.if = 'false';
+            }
+
+            connectedCallback(){
+                const shadowRoot = this.attachShadow({mode:'open'});
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.appendChild(document.importNode(template.content, true));
+                const slotTemplate = this.shadowRoot.querySelector('slot');
+                const nodeAssinged = slotTemplate.assignedNodes();
+                this.extractNodesFromSlot(nodeAssinged);
+            }
+
+            set if(value){
+                this.setAttribute('if', value);
+            }
+
+            get if(){
+                return this.getAttribute('if');
+            }
+
+            static get observedAttributes(){
+                return ['if'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue){
+                if(name === 'if'){
+                    if(newValue === 'false') {
+                        this.style.display = 'none';
+                    } else {
+                        this.style.display = 'block';
+                    }
+                }
+            }
+
+            extractNodesFromSlot(nodes){
+                for (const node of nodes){
+                    if(node.localName === 'template' && this.shadowRoot){
+                        this.shadowRoot.appendChild(document.importNode(node.content, true));
+                    }
+                }
+            }
+        }
+        window.customElements.define('dom-if', Domif);
+    })();
+</script>

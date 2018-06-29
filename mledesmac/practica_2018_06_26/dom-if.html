@@ -1,0 +1,64 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+    (() => {
+        class DomIf extends HTMLElement{
+
+            constructor(){
+                super();
+                this.show = 'true';
+            }
+
+            connectedCallback() {
+                const shadowRoot = this.attachShadow(
+                    {
+                        mode: 'open'
+                    }
+                );
+
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.innerHTML = template.innerHTML;
+                const slotTemplate = this.shadowRoot.querySelector('slot');
+                const nodesAssign = slotTemplate.assignedNodes();
+                this.getNodes(nodesAssign);
+            }
+
+            get show(){
+                return this.getAttribute("show");
+            }
+
+            set show(showValue){
+                this.setAttribute("show", showValue)
+            }
+
+            static get observedAttributes(){
+                return ['show'];
+            }
+
+            attributeChangedCallback(name,myOldValue,myNewValue){
+
+                if(name  === 'show'){
+                    console.log(this);
+                    if(myNewValue === 'false'){
+                        this.setAttribute('hidden', '')
+                    }else{
+                        this.removeAttribute('hidden');
+                    }
+                }
+            }
+
+            getNodes(nodes){
+                for(const node of nodes ){
+                    if(node.localName === 'template'&& this.shadowRoot){
+                        this.shadowRoot.append(document.importNode(node.content, true));
+
+                    }
+                }
+            }
+
+        }
+        customElements.define('dom-if', DomIf);
+    })(window.customElements, document);
+</script>

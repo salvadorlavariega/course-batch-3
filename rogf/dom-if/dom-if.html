@@ -1,0 +1,57 @@
+<template>
+    <slot></slot>
+</template>
+<script>
+    'use strict';
+    ((customElements, document) => {
+        class DOMIf extends HTMLElement {
+
+            constructor() {
+                super();
+
+                let tmpl = document.currentScript.ownerDocument.querySelector('template');
+
+                // Attach a shadow root to the element.
+                let shadowRoot = this.attachShadow({
+                    mode: 'open'
+                });
+
+                shadowRoot.appendChild(tmpl.content.cloneNode(true));
+                
+                const slot = this.shadowRoot.querySelector('slot');
+                const nodes = slot.assignedNodes();
+                                
+                for (const node of nodes) {
+                  if(node.localName === 'template' && this.shadowRoot){
+                    shadowRoot.append(document.importNode(node.content, true));
+                  }
+                }
+            }
+
+
+            static get observedAttributes() {
+                return ['if'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {  
+
+                if (name === 'if') {            
+                    if(newValue === 'true'){
+                        this.removeAttribute('hidden');
+                    }else{
+                        this.setAttribute('hidden','hidden');
+                    }
+                }
+            }
+
+            get if() {
+                return this.getAttribute('if');
+            }
+
+            set if(value) {
+                this.setAttribute('if', value);
+            }
+        }
+        customElements.define('dom-if', DOMIf);
+    })(window.customElements, document);
+</script>

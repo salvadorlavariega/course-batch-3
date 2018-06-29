@@ -1,0 +1,106 @@
+<template>
+    <slot></slot>
+</template>
+
+<script>
+  ((customElements, document) => {
+    'use strict';
+
+    class DomRepeat extends HTMLElement {
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this._templatize();
+      }
+
+      get items() {
+        return this._validateInputData(this.getAttribute('items'));
+      }
+
+      set items(newValue) {
+        this.setAttribute('items', JSON.stringify(newValue));
+      }
+
+      get as() {
+        return this.getAttribute('as');
+      }
+
+      set as(as) {
+        this.setAttribute('as', as);
+      }
+
+      static get observedAttributes() {
+        return [ 'items' ];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        switch (name) {
+          case 'items':
+            const template = this.querySelector('template');
+            this._render(template.parentNode.childNodes);
+            break;
+        }
+      }
+
+      _validateInputData(stringData) {
+        const array = JSON.parse(stringData);
+        if (Array.isArray(array) === true) {
+          return array;
+        } else {
+          throw new Error('The data for items must be array');
+        }
+      }
+
+      _templatize() {
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        const template = document.currentScript.ownerDocument.querySelector('template');
+        const templateContent = document.importNode(template.content, true);
+        shadowRoot.appendChild(templateContent);
+
+        const slot = this.shadowRoot.querySelector('slot');
+        const nodes = slot.assignedNodes();
+        //this.as = this.getAttribute('as');
+        this._render(nodes);
+      }
+
+      _render(nodes) {
+        for (const node of nodes) {
+          if (node.localName === 'template' && this.shadowRoot) {
+            const htmlTemplate = node.innerHTML;
+            this.shadowRoot.innerHTML = this._bindData(htmlTemplate);
+            this.dispatchEvent(new CustomEvent('dom-changed', {
+              bubbles: true,
+              composed: true
+            }));
+            break;
+          }
+        }
+      }
+
+      _bindData(html) {
+        let htmlStringRendered = '';
+        if (this.isAsValid()) {
+          const expression = '[[' + ((this.as && this.as.length > 0) ? this.as : 'item') +']]';
+          for (const item of this.items) {
+            htmlStringRendered += html.replace(expression, item);
+          }
+          return htmlStringRendered;
+        }
+        throw new Error('Error to bind data when read attribute AS');
+      }
+
+      isAsValid() {
+        const regexExpression = /^[a-zA-Z\_]*$/;
+        if (!regexExpression.test(this.as)) {
+          throw new Error('The attribute AS is not valid');          
+        }
+        return true;
+      }
+    }
+
+    customElements.define('dom-repeat', DomRepeat);
+  })(window.customElements, document);
+</script>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="import" href="dom-repeat.html">
+</head>
+<body>
+<dom-repeat items='[{"name": "Alfonso", "other": {"last": "Rios"}}]'>
+    <template>
+        <h2>[[other.last]]</h2>
+        <p>[[name]]</p>
+    </template>
+</dom-repeat>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="import" href="dom-repeat.html">
+</head>
+<body>
+<ul>
+    <dom-repeat items='["h", "o"]' as="lol">
+        <template>
+            <li>[[lol]]</li>
+        </template>
+    </dom-repeat>
+
+    <dom-repeat items='["lorem", "ipsum", "dolor"]' as="foo">
+        <template>
+            <li>[[foo]]</li>
+        </template>
+    </dom-repeat>
+</ul>
+</body>
+</html>
