@@ -180,10 +180,8 @@
                     currentTransform = (currentTransform !== '') ? currentTransform : 0;
                     const widthTab = this.shadowRoot.querySelector('.tab-list > li:first-of-type').clientWidth;
                     const translateInX = parseInt(currentTransform) + (widthTab * traslation);
-                    console.log('translateInX: ', translateInX);
                     tabListElement.style.transform = `translateX(${translateInX}px)`;
                 } catch (error) {
-                    console.error(error);
                     throw new Error('Error when apply transition in tabs');
                 }
             }
