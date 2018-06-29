@@ -22,16 +22,22 @@
 </template>
 
 <script>
-    (()=>{
+    ((customElements, document)=>{
+        'use strict';
         class MagicTabs extends HTMLElement{
             constructor(){
                 super();
             }
 
             connectedCallback(){
+                this._initTemplate();
+            }
+
+            _initTemplate(){
                 const shadowRoot = this.attachShadow({mode: 'open'});
                 const template = document.currentScript.ownerDocument.querySelector('template');
                 const titlesNodes = template.content.querySelector('#title');
+                this._removeTitlesNodes(titlesNodes);
                 this._createDivsElements(titlesNodes, 0, 5);
                 this._addArrowsButtons(titlesNodes);
                 shadowRoot.appendChild(document.importNode(template.content, true));
@@ -47,6 +53,21 @@
                 return this._getJSONObject(this.getAttribute('tabs'));
             }
 
+            static get observedAttributes() {
+                return [ 'tabs' ];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                if(this.shadowRoot) {
+                    const titles = this.shadowRoot.querySelector('#title');
+                    const content = this.shadowRoot.querySelector('#content');
+                    this._removeTitlesNodes(titles);
+                    content.innerHTML = '';
+                    this._addBasicToTitleElements(titles, 0, 5);
+                }
+
+            }
+
             _getJSONObject(stringTabs) {
                 const array = JSON.parse(stringTabs);
                 if (Array.isArray(array) === true) {
@@ -58,13 +79,10 @@
 
             _createDivsElements(titles, startIndex, stopIndex){
                 const tabs = this.tabs;
-                for(let contador = 1;  startIndex <= stopIndex; startIndex ++, contador ++){
+                for(let contador = 1;  startIndex <= stopIndex && contador <= 5 && startIndex < tabs.length; startIndex ++, contador ++){
                     const span = this._buildSpan(tabs[startIndex]);
                     const div = this._buildDivTab(span, startIndex);
                     titles.appendChild(div);
-                    if(contador === 5){
-                        break;
-                    }
                 }
                 return titles;
             }
@@ -95,25 +113,37 @@
                  } else {
                      node.addEventListener('click', (event) => {
                          const titles = this.shadowRoot.querySelector('#title');
-                         while (titles.firstChild) {
-                             titles.removeChild(titles.firstChild);
-                         }
                          const value = parseInt(event.target.getAttribute('value'));
                          if(node.innerText === '<'){
-                             this._createDivsElements(titles, this._getStartIndexByReturn(value),
-                             this._getStopIndexByReturn(value));
+                             this._removeTitlesNodes(titles);
+                             this._addBasicToTitleElements(titles, this._getStartIndexByReturn(value),
+                                 this._getStopIndexByReturn(value));
                          } else {
-                             this._createDivsElements(titles, this._getStartIndexByContinue(value), this._getStopIndexByContinue(value));
+                             const startIndex = this._getStartIndexByContinue(value);
+                             const stopIndex= this._getStopIndexByContinue(value);
+                             if(startIndex < stopIndex){
+                                 this._removeTitlesNodes(titles);
+                                 this._addBasicToTitleElements(titles, startIndex, stopIndex);
+                             }
                          }
-                         this._setTabWidth(titles.childNodes);
-                         this._addArrowsButtons(titles);
-                         this._addOnClickEvent(titles.childNodes);
 
                      })
                  }
              }
             }
 
+            _addBasicToTitleElements(titles, startIndex, stopIndex){
+                this._createDivsElements(titles, startIndex, stopIndex);
+                this._setTabWidth(titles.childNodes);
+                this._addArrowsButtons(titles);
+                this._addOnClickEvent(titles.childNodes);
+            }
+
+            _removeTitlesNodes(titlesNodes){
+                while (titlesNodes.firstChild) {
+                    titlesNodes.removeChild(titlesNodes.firstChild);
+                }
+            }
             _getStartIndexByReturn(value){
                 let startIndex = value - 5;
                 if(startIndex < 0) {
@@ -152,8 +182,12 @@
             _addArrowsButtons(titlesNodes){
                 const startIndex = titlesNodes.firstChild.getAttribute('index');
                 const endIndex = titlesNodes.lastChild.getAttribute('index');
-                titlesNodes.insertBefore(this._getLeftButton(startIndex), titlesNodes.firstChild);
-                titlesNodes.appendChild(this._getRightButton(endIndex));
+                if(startIndex != 0){
+                    titlesNodes.insertBefore(this._getLeftButton(startIndex), titlesNodes.firstChild);
+                }
+                if(endIndex < this.tabs.length -1){
+                    titlesNodes.appendChild(this._getRightButton(endIndex));
+                }
                 this._setTabWidth(titlesNodes.childNodes);
             }
 
@@ -179,5 +213,5 @@
 
         }
         window.customElements.define('magic-tabs', MagicTabs);
-    })();
+    })(window.customElements, document);
 </script>
