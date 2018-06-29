@@ -1,5 +1,24 @@
 <template>
-    <slot></slot>
+    <style>
+        .tabsContainer{
+            display: block;
+            width: 100%;
+            background-color: #2a86cA;
+        }
+        .contentContainer{
+            display: block;
+            width: 100%;
+            background-color: #666666;
+
+        }
+
+        .tab{
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+    <div class="tabsContainer" id="title"></div>
+    <div class="contentContainer" id="content"></div>
 </template>
 
 <script>
@@ -12,44 +31,152 @@
             connectedCallback(){
                 const shadowRoot = this.attachShadow({mode: 'open'});
                 const template = document.currentScript.ownerDocument.querySelector('template');
+                const titlesNodes = template.content.querySelector('#title');
+                this._createDivsElements(titlesNodes, 0, 5);
+                this._addArrowsButtons(titlesNodes);
                 shadowRoot.appendChild(document.importNode(template.content, true));
-                const slotTemplate = this.shadowRoot.querySelector('slot');
-                const nodeAssinged = slotTemplate.assignedNodes();
-                this._extractNodesFromSlot(nodeAssinged);
+                const shadowTitlesNodes = shadowRoot.querySelector('#title').childNodes;
+                this._addOnClickEvent(shadowTitlesNodes);
             }
 
             set tabs(value){
-                return this.setAttribute('tabs', JSON.stringify(value));
+                return this.setAttribute('tabs', value);
             }
 
             get tabs(){
-                return this.getAttribute('tabs');
+                return this._getJSONObject(this.getAttribute('tabs'));
             }
 
-            _extractNodesFromSlot(nodes){
-                for (const node of nodes){
-                    if(node.localName === 'template' && this.shadowRoot){
-                        //this.shadowRoot.appendChild(document.importNode(node.content, true));
-                        this_fillDivs(document.importNode(node.content, true));
+            _getJSONObject(stringTabs) {
+                const array = JSON.parse(stringTabs);
+                if (Array.isArray(array) === true) {
+                    return array;
+                } else {
+                    throw new Error('The data for tabs is not valid');
+                }
+            }
+
+            _createDivsElements(titles, startIndex, stopIndex){
+                const tabs = this.tabs;
+                for(let contador = 1;  startIndex <= stopIndex; startIndex ++, contador ++){
+                    const span = this._buildSpan(tabs[startIndex]);
+                    const div = this._buildDivTab(span, startIndex);
+                    titles.appendChild(div);
+                    if(contador === 5){
+                        break;
                     }
                 }
+                return titles;
             }
 
-            _setTabstitle(){
 
+
+            _buildSpan(tab){
+                const span = document.createElement('span');
+                span.innerHTML = tab.tab;
+                span.setAttribute('content', tab.content);
+                return span;
             }
 
-            _fillDivs(nodes){
-                const titlesDiv = this.shadowRoot.querySelector('#title');
-                const titleDiv = document.createElement('div');
-                const title = document.createElement('span');
-                const contentDiv = document.createElement('div');
-                for(const tab of this.tabs){
-                    title.innerText = tab.tab;
-                    titlesDiv.appendChild(title);
-                    titlesDiv.appendChild(titleDiv);
+            _buildDivTab(span, index){
+                const div = document.createElement('div');
+                div.setAttribute('class', 'tab');
+                div.setAttribute('index', index);
+                div.appendChild(span);
+                return div;
+            }
+
+            _addOnClickEvent(nodes){
+             for (const node of nodes){
+                 if(!this._isButton(node)){
+                     node.firstChild.addEventListener('click', (event)=> {
+                         this.shadowRoot.querySelector('#content').innerHTML = event.target.getAttribute('content');
+                     })
+                 } else {
+                     node.addEventListener('click', (event) => {
+                         const titles = this.shadowRoot.querySelector('#title');
+                         while (titles.firstChild) {
+                             titles.removeChild(titles.firstChild);
+                         }
+                         const value = parseInt(event.target.getAttribute('value'));
+                         if(node.innerText === '<'){
+                             this._createDivsElements(titles, this._getStartIndexByReturn(value),
+                             this._getStopIndexByReturn(value));
+                         } else {
+                             this._createDivsElements(titles, this._getStartIndexByContinue(value), this._getStopIndexByContinue(value));
+                         }
+                         this._setTabWidth(titles.childNodes);
+                         this._addArrowsButtons(titles);
+                         this._addOnClickEvent(titles.childNodes);
+
+                     })
+                 }
+             }
+            }
+
+            _getStartIndexByReturn(value){
+                let startIndex = value - 5;
+                if(startIndex < 0) {
+                    startIndex = 0;
+                }
+                return startIndex;
+            }
+
+            _getStopIndexByReturn(value){
+                if(value < 5) {
+                    value = 5;
+                }
+                return value;
+            }
+
+            _getStartIndexByContinue(value){
+                let startIndex = value + 1;
+                if(startIndex >= this.tabs.length) {
+                    startIndex = value;
+                }
+                return startIndex;
+            }
+
+            _getStopIndexByContinue(value){
+                let stopIndex = value + 5;
+                if(stopIndex >= this.tabs.length) {
+                    stopIndex = this.tabs.length - 1;
+                }
+                return stopIndex;
+            }
+
+            _isButton(node){
+                return node.hasChildNodes() && (node.innerText === '<' || node.innerText === '>' );
+            }
+
+            _addArrowsButtons(titlesNodes){
+                const startIndex = titlesNodes.firstChild.getAttribute('index');
+                const endIndex = titlesNodes.lastChild.getAttribute('index');
+                titlesNodes.insertBefore(this._getLeftButton(startIndex), titlesNodes.firstChild);
+                titlesNodes.appendChild(this._getRightButton(endIndex));
+                this._setTabWidth(titlesNodes.childNodes);
+            }
+
+            _setTabWidth(nodes){
+                for(const node of nodes){
+                    node.style.width = 100/nodes.length + '%';
                 }
             }
+
+            _getLeftButton(index) {
+                    const leftButton = document.createElement('button');
+                    leftButton.innerHTML = '<';
+                    leftButton.setAttribute('value', index);
+                    return leftButton;
+            }
+
+            _getRightButton(index){
+                const rightButton = document.createElement('button');
+                rightButton.innerHTML = '>';
+                rightButton.setAttribute('value', index);
+                return rightButton;
+            }
+
         }
         window.customElements.define('magic-tabs', MagicTabs);
     })();
