@@ -6,10 +6,8 @@
             background-color: #2a86cA;
         }
         .contentContainer{
-            display: block;
             width: 100%;
             background-color: #666666;
-
         }
 
         .tab{
@@ -107,29 +105,32 @@
             _addOnClickEvent(nodes){
              for (const node of nodes){
                  if(!this._isButton(node)){
-                     node.firstChild.addEventListener('click', (event)=> {
-                         this.shadowRoot.querySelector('#content').innerHTML = event.target.getAttribute('content');
+                     node.firstChild.addEventListener('click', (spanEvent)=> {
+                         this.shadowRoot.querySelector('#content').innerHTML = spanEvent.target.getAttribute('content');
                      })
                  } else {
-                     node.addEventListener('click', (event) => {
-                         const titles = this.shadowRoot.querySelector('#title');
-                         const value = parseInt(event.target.getAttribute('value'));
-                         if(node.innerText === '<'){
-                             this._removeTitlesNodes(titles);
-                             this._addBasicToTitleElements(titles, this._getStartIndexByReturn(value),
-                                 this._getStopIndexByReturn(value));
-                         } else {
-                             const startIndex = this._getStartIndexByContinue(value);
-                             const stopIndex= this._getStopIndexByContinue(value);
-                             if(startIndex < stopIndex){
-                                 this._removeTitlesNodes(titles);
-                                 this._addBasicToTitleElements(titles, startIndex, stopIndex);
-                             }
-                         }
-
+                     node.addEventListener('click', (buttonEvent) => {
+                         this._addClickButtonEventFunction(buttonEvent);
                      })
                  }
              }
+            }
+
+            _addClickButtonEventFunction(buttonEvent){
+                const titles = this.shadowRoot.querySelector('#title');
+                const value = parseInt(buttonEvent.target.getAttribute('value'));
+                if(buttonEvent.target.innerText === '<'){
+                    this._removeTitlesNodes(titles);
+                    this._addBasicToTitleElements(titles, this._getStartIndexByReturn(value),
+                        this._getStopIndexByReturn(value));
+                } else {
+                    const startIndex = this._getStartIndexByContinue(value);
+                    const stopIndex= this._getStopIndexByContinue(value);
+                    if(startIndex < stopIndex){
+                        this._removeTitlesNodes(titles);
+                        this._addBasicToTitleElements(titles, startIndex, stopIndex);
+                    }
+                }
             }
 
             _addBasicToTitleElements(titles, startIndex, stopIndex){
