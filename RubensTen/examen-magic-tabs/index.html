@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Examen - Magic Tabs</title>
+    <link rel="import" href="magic-tabs/magic-tabs.html">
+</head>
+<body>
+    <style>
+        .wrapper {
+            width: 1000px;
+        }
+
+        #three {
+            --magic-tabs-wrapper-width: 1000px; 
+            --magic-tabs-header-tabs-background: #BD1450;
+            --magic-tabs-header-tabs-color: #FFF;            
+            --magic-tabs-content-tab-background: #F4F4F4;
+        }
+    </style>
+    <div class="wrapper">
+        <h1>Tab con 1 elemento ocupa el 100% del parent</h1>
+        <magic-tabs tabs='[{"tab": "lorem ipsum", "content": "this is a content of the first tab" }]'></magic-tabs>
+        <hr>
+        <h1>Tab con 3 elementos ocupa el 30% del parent y se modifica por variables de estilo</h1>
+        <magic-tabs id="three"></magic-tabs>
+        <hr>
+        <h1>Tab con 5 elementos ocupa el 20% del parent y no se muestran controles</h1>
+        <magic-tabs id="five"></magic-tabs>
+        <hr>
+        <h1>Tab con 50 elementos, se muestran un maximo de 5 tabs dentro del parent más los controles</h1>
+        <magic-tabs id="fifty"></magic-tabs>
+        <hr>
+    </div>
+    <script>
+        (() => {
+            const magicTabsThree = document.querySelector('#three');
+            const tabs = [
+                {'tab': 'uno', 'content': 'lorem ipsum dolor uno'},
+                {'tab': 'dos', 'content': 'lorem ipsum dolor dos'},
+                {'tab': 'tres', 'content': 'lorem ipsum dolor tres'}
+            ];
+            magicTabsThree.setAttribute('tabs', JSON.stringify(tabs));
+
+            const magicTabsfive = document.querySelector('#five');
+            const fiveTabs = [
+                {'tab': 'uno', 'content': 'lorem ipsum dolor uno'},
+                {'tab': 'dos', 'content': 'lorem ipsum dolor dos'},
+                {'tab': 'tres', 'content': 'lorem ipsum dolor tres'},
+                {'tab': 'cuatro', 'content': 'lorem ipsum dolor cuatro'},
+                {'tab': 'cinco', 'content': 'lorem ipsum dolor cinco'}
+            ];
+            magicTabsfive.setAttribute('tabs', JSON.stringify(fiveTabs));
+
+            const magicTabsFifty = document.querySelector('#fifty');
+            const fiftyTabs = [];
+            for (let i = 1; i < 50; i++) {
+                fiftyTabs.push(
+                    {'tab': `Title-${i}` , 'content': `<h2>content of title ${i}</h2>`}
+                );
+            }
+            magicTabsFifty.setAttribute('tabs', JSON.stringify(fiftyTabs));
+        })();
+    </script>
+</body>
+</html>

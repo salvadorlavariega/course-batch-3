@@ -1,0 +1,250 @@
+<template>
+    <style>
+        .magic-tabs-wrapper {
+            width: var(--magic-tabs-wrapper-width, 960px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        nav.header-tabs {
+            width: 100%;
+            display: block;
+            background: var(--magic-tabs-header-tabs-background, #3399CC);
+            color: var(--magic-tabs-header-tabs-color, #FFF);
+            overflow: hidden;
+        }
+
+        .prev, .next {
+            width: 50px;
+            position: absolute;
+            top: 0;
+            background: #fff;
+            color: #090744;
+            font-size: 28px;
+            border: none;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .prev {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+        }
+
+        .tab-list {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            text-align: center;
+            height: 34px;
+            z-index: 1;
+        }
+
+        .tab-list li {
+            min-width: 180px;
+            padding: 10px 0;
+            display: inline-block;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .content-tab {
+            padding: 20px;
+            background-color: var(--magic-tabs-content-tab-background, #CACACA);
+        }
+
+        .prev, .next {
+            display: none;
+        }
+    </style>
+    <div class="magic-tabs-wrapper">
+        <nav class="header-tabs">
+            <button class="prev">&lt;</button>
+            <ul class="tab-list"></ul>
+            <button class="next">&gt;</button>
+        </nav>
+        <div class="content-tab"></div>
+    </div>
+</template>
+
+<script>
+    ((customElements, document) => {
+        class MagicTabs extends HTMLElement {
+            constructor() {
+                super();
+                this.selectedTab = 0;
+            }
+
+            connectedCallback() {
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                this.attachShadow({mode: 'open'});
+                this.shadowRoot.appendChild(template.content.cloneNode(true));
+                const buttonPrev = this.shadowRoot.querySelector('.prev');
+                const buttonNext = this.shadowRoot.querySelector('.next');
+                this.addingEventListeners(buttonPrev);
+                this.addingEventListeners(buttonNext);
+                this.makeTabs(this.tabs);
+            }
+
+            static get observedAttributes() {
+                return [ 'tabs' ];
+            }
+
+            attributeChangedCallback (name, oldValue, newValue) {
+                switch (name) {
+                    case name:
+                        this.makeTabs(this.tabs);
+                        break;
+                
+                    default:
+                        throw new Error('The attribute not match with the definition');
+                        break;
+                }
+            }
+
+            
+            set tabs (tabs) {
+                this.setAttribute('tabs', tabs);
+            }
+
+            get tabs() {
+                try {
+                    return JSON.parse(this.getAttribute('tabs'));
+                } catch (error) {
+                    throw new Error('The attribute tabs is not valid');
+                }
+            }
+
+            makeTabs (tabList) {
+                if (this.shadowRoot && tabList) {               
+                    this.generateTabs(tabList);
+                    this.renderTabContent(this.selectedTab, tabList);
+                    this.showControls(tabList);
+                }
+            }
+
+
+            showControls(tabList) {
+                let value = 'none';
+                if (tabList.length > 5) {
+                    value = 'block';
+                }                
+                this.shadowRoot.querySelector('.next').style.display = value;
+                this.shadowRoot.querySelector('.prev').style.display = value;
+            }
+
+            addingEventListeners (element) {
+                element.addEventListener('click', (event) => {
+                    if (this.isTab(event)) {
+                        this.selectedTab = event.target.getAttribute('tab-id'); 
+                        this.renderTabContent(this.selectedTab, this.tabs);
+                    }
+
+                    if (this.isButton(event)) {
+                        if (event.target.classList.value.indexOf('next') !== -1) {
+                            this.next();
+                        }
+
+                        if (event.target.classList.value.indexOf('prev') !== -1) {
+                            this.prev();
+                        }
+                    }
+                });
+            }
+            
+            next () {
+                if (this.selectedTab < this.tabs.length) {                
+                    this.selectedTab++;
+                    this.transitionTabs(-1);
+                }
+                this.renderTabContent(this.selectedTab, this.tabs);
+            }
+
+            prev () {
+                if (this.selectedTab > 0) {
+                    this.selectedTab--;
+                    this.transitionTabs(1);
+                }
+                this.renderTabContent(this.selectedTab, this.tabs);
+            }
+
+            transitionTabs(traslation) {
+                try {
+                    const tabListElement = this.shadowRoot.querySelector('.tab-list');
+                    let currentTransform = tabListElement.style.transform.replace('translateX(', '').replace('px)', '');
+                    currentTransform = (currentTransform !== '') ? currentTransform : 0;
+                    const widthTab = this.shadowRoot.querySelector('.tab-list > li:first-of-type').clientWidth;
+                    const translateInX = parseInt(currentTransform) + (widthTab * traslation);
+                    tabListElement.style.transform = `translateX(${translateInX}px)`;
+                } catch (error) {
+                    throw new Error('Error when apply transition in tabs');
+                }
+            }
+            
+            isTab(event) {
+                if (
+                    event.target.tagName.toLowerCase() === 'li' &&
+                    event.target.classList.value.indexOf('tab') !== -1
+                ) {
+                    return true;                
+                }
+                return false;
+            }
+
+            isButton(event) {
+                if (
+                    event.target.tagName.toLowerCase() === 'button'                    
+                ) {
+                    return true;                
+                }
+                return false;
+            }
+
+            generateTabs(tabList) {
+                const headerTabs = this.shadowRoot.querySelector('.header-tabs');                
+                const ul = this.shadowRoot.querySelector('.tab-list');
+                ul.innerHTML = '';
+                let width = null;
+                if (tabList.length <= 5) {
+                    width = (100 / tabList.length) + '%';
+                    ul.style.maxWidth = '100%';
+                }else {
+                    headerTabs.style.width = (180 * tabList.length) + 'px';
+                }
+                for(const i in tabList) {
+                    const li = document.createElement('li');
+                    if (width) {
+                        li.style.width = width;
+                    }
+                    li.className = 'tab';
+                    li.setAttribute('tab-id', i);
+                    li.innerHTML = tabList[i].tab;
+                    this.addingEventListeners(li);
+                    ul.appendChild(li);
+                }
+            }
+
+            getContentByTab(selectedTab, tabList) {
+                let content = '';
+                for(const i in tabList) {
+                    if (i === ('' + selectedTab)) {                        
+                        content = tabList[i].content;
+                        break;
+                    }
+                }
+                return content;
+            }
+
+            renderTabContent(selectedTab, tabList) {
+                const tabContentList = this.shadowRoot.querySelector('.content-tab');
+                tabContentList.innerHTML = this.getContentByTab(selectedTab, tabList);                
+            }
+        }
+        customElements.define('magic-tabs', MagicTabs);
+    })(window.customElements, document);
+</script>
