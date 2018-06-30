@@ -9,8 +9,12 @@
             width: 100%;
             background-color: #666666;
         }
-
         .tab{
+            display: inline-block;
+            text-align: center;
+        }
+        .selected{
+            background-color: #b92a45;
             display: inline-block;
             text-align: center;
         }
@@ -77,36 +81,33 @@
 
             _createDivsElements(titles, startIndex, stopIndex){
                 const tabs = this.tabs;
-                for(let contador = 1;  startIndex <= stopIndex && contador <= 5 && startIndex < tabs.length; startIndex ++, contador ++){
-                    const span = this._buildSpan(tabs[startIndex]);
-                    const div = this._buildDivTab(span, startIndex);
+                for(let tabCount = 1;  startIndex <= stopIndex && tabCount <= 5 && startIndex < tabs.length; startIndex ++, tabCount ++){
+                    const div = this._buildDivTab(tabs[startIndex], startIndex);
                     titles.appendChild(div);
                 }
                 return titles;
             }
 
 
-
-            _buildSpan(tab){
-                const span = document.createElement('span');
-                span.innerHTML = tab.tab;
-                span.setAttribute('content', tab.content);
-                return span;
-            }
-
-            _buildDivTab(span, index){
+            _buildDivTab(tab, index){
                 const div = document.createElement('div');
                 div.setAttribute('class', 'tab');
                 div.setAttribute('index', index);
-                div.appendChild(span);
+                div.setAttribute('content', tab.content);
+                div.innerHTML = tab.tab;
                 return div;
             }
 
             _addOnClickEvent(nodes){
              for (const node of nodes){
                  if(!this._isButton(node)){
-                     node.firstChild.addEventListener('click', (spanEvent)=> {
+                     node.addEventListener('click', (spanEvent)=> {
                          this.shadowRoot.querySelector('#content').innerHTML = spanEvent.target.getAttribute('content');
+                         const tabSelected = this.shadowRoot.querySelector('.selected');
+                         if(tabSelected != null) {
+                             tabSelected.setAttribute('class', 'tab');
+                         }
+                         spanEvent.target.setAttribute('class', 'selected');
                      })
                  } else {
                      node.addEventListener('click', (buttonEvent) => {
