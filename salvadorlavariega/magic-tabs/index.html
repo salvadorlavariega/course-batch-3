@@ -1,0 +1,45 @@
+<html>
+<head>
+    <title>
+        Magic Tabs
+    </title>
+    <link rel="import" href="magic-tabs.html">
+</head>
+<body>
+    <magic-tabs id="oneElements"></magic-tabs>
+    <br>
+    <magic-tabs id="threeElements"></magic-tabs>
+    <br>
+    <magic-tabs id="manyElements"></magic-tabs>
+
+</body>
+<script>
+    const magicTabsOne = document.querySelector('#oneElements');
+    const magicTabsThree = document.querySelector('#threeElements');
+    const magicTabsMany = document.querySelector('#manyElements');
+
+    //for one tab
+    let index = 1;
+    let tabs = `[{"tab": " tab ${index}", "content": "<spam>Title of tab ${index}</spam><p>texto sobre el tab ${index}</p>"}] `;
+    magicTabsOne.setAttribute('tabs',tabs);
+
+    //for three tabs
+    tabs = '[';
+    for(index = 1; index <= 2; index++){
+        tabs += `{"tab": " tab ${index}", "content": "<spam>Title of tab ${index}</spam><p>texto sobre el tab ${index}</p>"}, `;
+    }
+    tabs += `{"tab": " tab ${index}", "content": "<spam>Title of tab ${index}</spam><p>texto sobre el tab ${index}</p>"}] `;
+    magicTabsThree.setAttribute('tabs',tabs);
+
+    // for m50 or more tabs
+    tabs = '[';
+    for(index = 1; index <= 50; index++){
+        tabs += `{"tab": " tab ${index}", "content": "<spam>Title of tab ${index}</spam><p>texto sobre el tab ${index}</p>"}, `;
+    }
+    tabs += `{"tab": " tab ${index}", "content": "<spam>Title of tab ${index}</spam><p>texto sobre el tab ${index}</p>"}] `;
+    magicTabsMany.setAttribute('tabs',tabs);
+
+
+
+</script>
+</html>
