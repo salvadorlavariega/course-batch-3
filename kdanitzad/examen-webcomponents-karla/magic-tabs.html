@@ -1,0 +1,158 @@
+
+<template>
+    <div id="tabcontenedor">
+        <!--<div id="atras" name="" style="display: none"> < </div>
+        <div id="adelante" name="" style="display: none"> > </div>-->
+    </div>
+    <div id="contenido">
+    </div>
+
+    <style>
+    #contenido{
+        background-color: antiquewhite;
+    }
+
+    .all{
+        width: 100%;
+        }
+
+    #tabcontenedor{
+        border: solid 1px deeppink;
+        background: blueviolet;
+        color: white;
+    }
+
+    .activo{
+        background: deepskyblue;
+    }
+
+
+
+</style>
+
+</template>
+
+<script>
+    (()=>{
+        class magicTabs extends HTMLElement{
+
+            constructor(){
+                super();
+            }
+
+            connectedCallback() {
+                this.initializer();
+            }
+
+            set input(newValue){
+                this.setAttribute('input',newValue);
+            }
+
+            get input(){
+                return JSON.parse(this.getAttribute('input'));
+            }
+
+            static get observedAttributes(){
+                return ['input'];
+            }
+
+            initializer(){
+                const shadowRoot = this.attachShadow({
+                        mode: 'open'
+                    }
+                );
+
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                shadowRoot.innerHTML = template.innerHTML;
+                const mainContainer = this.shadowRoot.querySelector('#tabcontenedor');
+                const contentDisplayer = this.shadowRoot.querySelector('#contenido');
+                const bck = this.shadowRoot.querySelector('#atras');
+                const fwd = this.shadowRoot.querySelector('#adelante');
+                const inputLenght = this.input.length;
+                let i = 0;
+
+                const bk = document.createElement('div');
+                const fw = document.createElement('div');
+
+                bk.setAttribute('id',i);
+                fw.setAttribute('id',inputLenght);
+
+                fw.style.display = 'inline-block';
+                bk.style.display = 'inline-block';
+
+                bk.innerHTML = '<';
+                fw.innerHTML = '>';
+
+
+                for(const individualinput of this.input){
+
+                    const tab = document.createElement('div');
+
+                    tab.addEventListener('click',function(){
+                        contentDisplayer.innerHTML = individualinput.content;
+
+                    });
+
+                    //bck.setAttribute('name',i);
+                    //fwd.setAttribute('name',inputLenght-1);
+
+                    const atr = document.createAttribute('pos');
+                    atr.value = i;
+                    tab.setAttributeNode(atr);
+                    tab.innerHTML = individualinput.tab;
+                    tab.style.display = 'inline-block';
+                    tab.style.border = 'solid deeppink 1px';
+                    this.stylizing(tab,inputLenght);
+                    mainContainer.appendChild(tab);
+                    i++;
+                }
+
+
+
+
+
+            }
+
+            stylizing(element,length){
+                if(length<= 5){
+                    if(length == 1){
+                        element.style.width = '99.99%';
+                    }
+                    if(length>1 || length == 5){
+                        let customWidth = 99.5/length;
+                        element.style.width = customWidth + '%';
+                    }
+                }
+                else if(length >5){
+                    if(length == 6){
+                        let customWidth = 99/6;
+                        element.style.width = customWidth + '%';
+                    }
+                    else {
+                        let customWidth = 99/7;
+                        element.style.width = customWidth + '%';
+                    }
+                }
+
+
+            }
+
+
+           attributeChangedCallback(name,oldValue,newValue){
+               switch (name){
+                   case 'input':
+                       console.log(newValue);
+                       break;
+                   default:
+                       break;
+               }
+            }
+
+
+
+        }
+        window.customElements.define('magic-tabs', magicTabs);
+    })();
+</script>
+
+
