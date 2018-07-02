@@ -1,0 +1,39 @@
+<template id="myElementListTemplate">
+    <lista></lista>
+</template>
+
+<script defer>
+(function myListElement(customElements, document) {
+    'use strict';
+    
+    let arreglo = ['<li>Elemento 1 </li>', '<li>Elemento 2 </li>', '<li>Elemento 3 </li>'];
+     
+    
+    class MyListElement extends HTMLElement {
+        
+       constructor() {
+        super();
+        this.selected = true;
+
+        // pain point 3 (set / update shadow dom)
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        const templ = document.currentScript.ownerDocument.querySelector('template');
+        shadowRoot.appendChild(document.importNode(templ.content, true));
+        const customComponentList = shadowRoot.querySelector('lista');
+        customComponentList.innerHTML = ` 
+            <ul> </ul>
+        `;
+        const ulElement = customComponentList.querySelector('ul');        
+        for(const index in arreglo){
+            // customComponentList.querySelector('ul').appendChild(document.createElement(arreglo[index]))
+            ulElement.innerHTML = ulElement.innerHTML + arreglo[index]; 
+        }
+            
+
+        
+      }
+    }
+
+    customElements.define('my-list-element', MyListElement);
+  })(window.customElements, document)
+</script>
