@@ -1,0 +1,95 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+<dom-module id="magic-tabs">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+            paper-tabs {
+                font-family: 'Roboto', 'Noto', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                width: 100%;
+                text-transform: uppercase;
+                margin-bottom: 1px;
+            }
+        </style>
+        <h2>Hello My Magic Tabs!!!</h2>
+        <div>
+            <paper-tabs id="tabs" selected="{{selected}}" scrollable>
+                <paper-tab>The first tab</paper-tab>
+                <paper-tab>Tab two</paper-tab>
+                <paper-tab>The third tab</paper-tab>
+                <paper-tab>Fourth tab</paper-tab>
+            </paper-tabs>
+
+            <iron-pages id="views" selected="{{selected}}">
+                <div>Page 1</div>
+                <div>Page 2</div>
+                <div>Page 3</div>
+            </iron-pages>
+        </div>
+    </template>
+
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class MagicTabs extends Polymer.Element {
+            static get is() { return 'magic-tabs'; }
+            static get properties() {
+                return {
+                    num: {
+                        type: Number,
+                        value: null,
+                        observer: '_changeNum'
+                    },
+                    data: {
+                        type: Object,
+                        value: null,
+                        observer: '_changeData'
+                    },
+                    selected:{
+                        type: Number,
+                        value: 0
+                    }
+
+                };
+            }
+
+            _changeNum(){
+                if(this.num != null){
+                    this.$.views.innerHTML = '';
+                    this.$.tabs.innerHTML = '';
+                    for(let i=0;i<this.num;i++){
+                        const newNode = document.createElement('div');
+                        newNode.innerText = `Page ${i+1}`;
+                        this.$.views.appendChild(newNode);
+                        const newTab = document.createElement('paper-tab');
+                        newTab.innerText = `Tab ${i+1}`;
+                        this.$.tabs.appendChild(newTab);
+                    }
+                }
+            }
+
+            _changeData(){
+                if(this.data != null){
+                    this.$.views.innerHTML = '';
+                    this.$.tabs.innerHTML = '';
+                    for(const item of this.data){
+                        const newNode = document.createElement('div');
+                        newNode.innerHTML = item.content;
+                        this.$.views.appendChild(newNode);
+                        const newTab = document.createElement('paper-tab');
+                        newTab.innerText = item.tab;
+                        this.$.tabs.appendChild(newTab);
+                    }
+                }
+            }
+        }
+
+        window.customElements.define(MagicTabs.is, MagicTabs);
+    </script>
+</dom-module>

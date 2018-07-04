@@ -1,0 +1,6 @@
+{
+  "name": "magic-tabs",
+  "short_name": "magic-tabs",
+  "start_url": "/",
+  "display": "standalone"
+}
