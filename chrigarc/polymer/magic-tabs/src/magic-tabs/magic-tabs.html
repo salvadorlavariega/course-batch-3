@@ -80,7 +80,7 @@
                     this.$.tabs.innerHTML = '';
                     for(const item of this.data){
                         const newNode = document.createElement('div');
-                        newNode.innerText = item.content;
+                        newNode.innerHTML = item.content;
                         this.$.views.appendChild(newNode);
                         const newTab = document.createElement('paper-tab');
                         newTab.innerText = item.tab;
