@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+
+<dom-module id="one-component">
+    <template>
+        <style>
+            body {
+                margin: 0;
+                display: flex;
+                align-items: flex-end;
+                height: 80px;
+                background: #009688;
+                color: white;
+            }
+            paper-tabs {
+                font-family: 'Roboto', 'Noto', sans-serif;
+                -webkit-font-smoothing: antialiased;
+                width: 100%;
+                text-transform: uppercase;
+                margin-bottom: 1px;
+            }
+
+            .contentContainer{
+                width: 100%;
+                background-color: #666666;
+            }
+        </style>
+        <paper-tabs selected="0" scrollable>
+            <template is="dom-repeat" items="[[tabs]]">
+                <paper-tab on-click="showContent">{{item.tab}}</paper-tab>
+            </template>
+        </paper-tabs>
+        <div class="container" id="container">
+
+        </div>
+    </template>
+
+    <script>
+
+        class OneComponent extends Polymer.Element {
+            static get is() {
+                return 'one-component';
+            }
+
+            static get properties() {
+                return {
+                    tabs: {
+                        type: Object
+                    }
+                };
+            }
+
+            showContent(event){
+                const content = event.model.item.content;
+                this.shadowRoot.querySelector('#container').innerHTML = content;
+
+            }
+        }
+
+        window.customElements.define(OneComponent.is, OneComponent);
+    </script>
+</dom-module>
