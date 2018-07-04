@@ -43,23 +43,49 @@
                 return {
                     num: {
                         type: Number,
-                        value: 0,
+                        value: null,
                         observer: '_changeNum'
+                    },
+                    data: {
+                        type: Object,
+                        value: null,
+                        observer: '_changeData'
+                    },
+                    selected:{
+                        type: Number,
+                        value: 0
                     }
+
                 };
             }
 
             _changeNum(){
-                console.log(this.num);
-                this.$.views.innerHTML = '';
-                this.$.tabs.innerHTML = '';
-                for(let i=0;i<this.num;i++){
-                    const newNode = document.createElement('div');
-                    newNode.innerText = `Page ${i+1}`;
-                    this.$.views.appendChild(newNode);
-                    const newTab = document.createElement('paper-tab');
-                    newTab.innerText = `Tab ${i+1}`;
-                    this.$.tabs.appendChild(newTab);
+                if(this.num != null){
+                    this.$.views.innerHTML = '';
+                    this.$.tabs.innerHTML = '';
+                    for(let i=0;i<this.num;i++){
+                        const newNode = document.createElement('div');
+                        newNode.innerText = `Page ${i+1}`;
+                        this.$.views.appendChild(newNode);
+                        const newTab = document.createElement('paper-tab');
+                        newTab.innerText = `Tab ${i+1}`;
+                        this.$.tabs.appendChild(newTab);
+                    }
+                }
+            }
+
+            _changeData(){
+                if(this.data != null){
+                    this.$.views.innerHTML = '';
+                    this.$.tabs.innerHTML = '';
+                    for(const item of this.data){
+                        const newNode = document.createElement('div');
+                        newNode.innerText = item.content;
+                        this.$.views.appendChild(newNode);
+                        const newTab = document.createElement('paper-tab');
+                        newTab.innerText = item.tab;
+                        this.$.tabs.appendChild(newTab);
+                    }
                 }
             }
         }
