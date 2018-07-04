@@ -1,0 +1,64 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="one-component">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <h2>Login</h2>
+
+        <paper-input label="Username" id="user"></paper-input>
+        <paper-input label="Password" id="pass"></paper-input>
+
+        <paper-button on-click="login">LogIn</paper-button>
+
+    </template>
+
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class OneComponent extends Polymer.Element {
+        static get is() {
+          return 'one-component';
+        }
+
+        static get properties() {
+          return {
+            response: {
+              type: Object,
+              value: {},
+              observer: '_changeResponse'
+            }
+          };
+        }
+
+        login() {
+          const username = this.$.user.value;
+          const password = this.$.pass.value;
+
+          this.dispatchEvent(new CustomEvent('login-request', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              user: username,
+              pass: password
+            }
+          }));
+        }
+
+        _changeResponse() {
+          this.$.user.value = '';
+          this.$.pass.value = '';
+        }
+      }
+
+      window.customElements.define(OneComponent.is, OneComponent);
+    </script>
+</dom-module>
