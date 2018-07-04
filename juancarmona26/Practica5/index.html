@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Under the hoods</title>
+    <link rel="import" href="toogle-button.html">
+    <link rel="import" href="list.html">
+  </head>
+  <body>
+    <my-element id='buttonElement'></my-element>
+    <my-list-element></my-list-element>
+  </body>
+
+  <script>    
+    document.querySelector('body').addEventListener('my-element-clicked', (event) => {        
+
+        value =  document.querySelector('my-element').getAttribute('value');
+        console.log('LD: ' + value);
+        if(value === 'false') {            
+            document.querySelector('my-list-element').hidden = true;
+        } else if(value === 'true'){            
+            document.querySelector('my-list-element').hidden =false;
+        }
+        
+
+    });
+  </script>
+</html>
