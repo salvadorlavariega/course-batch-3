@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../magic-tabs/magic-tabs.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="magic-tabs-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+    <magic-tabs num="10"></magic-tabs>
+    <magic-tabs num="50"></magic-tabs>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class MagicTabsApp extends Polymer.Element {
+      static get is() { return 'magic-tabs-app'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'magic-tabs-app'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(MagicTabsApp.is, MagicTabsApp);
+  </script>
+</dom-module>
