@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="two-component">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h2>This is about</h2>
+
+        <ul>
+            <li>Username: [[request.user]]</li>
+            <li>Password: [[request.pass]]</li>
+        </ul>
+
+        <paper-button on-click="resetData">Reset</paper-button>
+    </template>
+
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class TwoComponent extends Polymer.Element {
+        static get is() { return 'two-component'; }
+        static get properties() {
+          return {
+            request: {
+              type: Object,
+              value: {}
+            }
+          };
+        }
+
+        resetData() {
+          this.set('request', {});
+          this.dispatchEvent(new CustomEvent('reset-data', {
+            bubbles: true,
+            composed: true
+          }));
+        }
+      }
+
+      window.customElements.define(TwoComponent.is, TwoComponent);
+    </script>
+</dom-module>

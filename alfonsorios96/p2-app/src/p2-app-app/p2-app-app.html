@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="../one-component/one-component.html">
+<link rel="import" href="../two-component/two-component.html">
+
+<dom-module id="p2-app-app">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}"
+                   pattern="/:page"
+                   data="{{data}}"></app-route>
+
+        <a href="home">HOME</a>
+        <a href="about">ABOUT</a>
+
+        <iron-pages
+                selected="{{data.page}}"
+                attr-for-selected="view"
+                fallback-selection="home"
+                on-login-request="login"
+                on-reset-data="reset"
+                role="main">
+            <one-component view="home" response="[[loginOther]]"></one-component>
+            <two-component view="about" request="[[loginData]]"></two-component>
+        </iron-pages>
+    </template>
+
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class P2AppApp extends Polymer.Element {
+        static get is() {
+          return 'p2-app-app';
+        }
+
+        static get properties() {
+          return {
+            loginData: {
+              type: Object,
+              value: {}
+            },
+            loginOther: {
+              type: Object,
+              value: {}
+            }
+          };
+        }
+
+        login(event) {
+          const payload = event.detail;
+          this.set('loginData', payload);
+          this.set('data.page', 'about');
+        }
+
+        reset() {
+          this.set('loginOther', null);
+          this.set('data.page', 'home');
+        }
+      }
+
+      window.customElements.define(P2AppApp.is, P2AppApp);
+    </script>
+</dom-module>
