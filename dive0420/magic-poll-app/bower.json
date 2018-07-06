@@ -10,7 +10,8 @@
     "paper-button": "PolymerElements/paper-button#^2.1.1",
     "iron-ajax": "PolymerElements/iron-ajax#^2.1.3",
     "paper-item": "PolymerElements/paper-item#^2.1.1",
-    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4"
+    "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.4",
+    "google-chart": "GoogleWebComponents/google-chart#^2.0.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

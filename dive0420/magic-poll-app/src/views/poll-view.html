@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../../bower_components/google-chart/google-chart.html">
 
 <dom-module id="poll-view">
     <template>
@@ -74,6 +75,11 @@
                                     </span>
                                 </paper-checkbox>
                             </template>
+                            <google-chart
+                                    type='bar'
+                                    options='{"title": "votes... votes and votes"}'
+                                    data='[[builData(item.options)]]'>
+                            </google-chart>
                         </div>
                     </div>
                 </template>
@@ -134,6 +140,14 @@
                 this.set('isVote', false);
             }
 
+            builData(options){
+                const data = new Array( ['Options', 'Votes']);
+                for(const option of options){
+                    const element = new Array(option.option, option.votes);
+                    data.push(element);
+                }
+                return data;
+            }
         }
 
 

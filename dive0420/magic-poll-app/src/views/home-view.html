@@ -22,7 +22,8 @@
                     url="https://poll-api-rest.herokuapp.com/poll"
                     body="[[request]]"
                     content-type="application/json"
-                    handle-as="json">
+                    handle-as="json"
+                    on-response="handleResponse">
             </iron-ajax>
         </template>
     </template>
@@ -55,9 +56,18 @@
             save(){
                 const pollName = this.shadowRoot.querySelector('#poll-name');
                 const options = this.shadowRoot.querySelector('#options');
-                this.set('request', { "question": pollName.value, "options": this.buildOptions(options.childNodes)});
-                this.set('isReadyToSave', true);
+                if(pollName.value != ''){
+                    const arrayOptions = this.buildOptions(options.childNodes);
+                    if(arrayOptions.length > 0) {
+                        this.set('request', {"question": pollName.value, "options": arrayOptions});
+                        this.set('isReadyToSave', true);
+                    }
+                }
 
+            }
+
+            handleResponse(){
+                window.location.assign("/crear");
             }
 
             buildOptions(options){
