@@ -15,11 +15,12 @@
                    method="post"
                    content-type="application/json"
                    url="https://poll-api-rest.herokuapp.com/vote/",
-                   body='{"question":"hola","options":[{"option":"op1","votes":0}]}'
+                   body=''
                    handle-as="json"
                    loading="{{cargando}}"
                    last-response="{{polls}}"></iron-ajax>
         <h2>Encuesta: [[poll.question]]</h2>
+        <div hidden$="[[!cargando]]">Estamos cargando datos...</div>
         <google-chart
                 id="graph"
                 type='pie'
@@ -94,7 +95,11 @@
 
             vote(event){
                 const indexVote = event.target.id.toString().replace('vote-id-', '');
-                this.$['request-save'].url =  `https://poll-api-rest.herokuapp.com/vote/${this.poll.id}/${indexVote}`;
+                // this.$['request-save'].url =  `https://poll-api-rest.herokuapp.com/vote/${this.poll.id}/${indexVote}`;
+                this.$['request-save'].body = JSON.stringify({
+                    pollId: this.poll.id,
+                    option: indexVote
+                });
                 this.$['request-save'].generateRequest();
             }
         }
