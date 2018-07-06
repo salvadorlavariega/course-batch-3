@@ -93,6 +93,7 @@
             }
 
             vote(event){
+                const indexVote = event.target.id.toString().replace('vote-id-', '');
                 this.$['request-save'].url =  `https://poll-api-rest.herokuapp.com/vote/${this.poll.id}/${indexVote}`;
                 this.$['request-save'].generateRequest();
             }
