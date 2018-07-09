@@ -4,6 +4,8 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+
 
 <dom-module id="recreation-poll-app">
     <template>
@@ -35,7 +37,7 @@
 
         <iron-ajax
                 id="myAjax"
-                headers='{"Content-type":"application/json"}'
+                headers='{"Content-Type": "application/json"}'
                 handle-as="json"
                 on-response="responseManagement">
         </iron-ajax>
@@ -62,14 +64,14 @@
           };
         }
 
-          connectedCallback() {
-              super.connectedCallback();
-              this.getQuestions();
-          }
+        connectedCallback() {
+            super.connectedCallback();
+            this.getQuestions();
+        }
 
 
         pullQuestion(event) {
-            const endpoint = 'https://poll-api-rest.herokuapp.com/poll ';
+            const endpoint = 'https://poll-api-rest.herokuapp.com/poll';
             const local = 'http://localhost:5000/poll';
           this.$.myAjax.url = endpoint;
           this.$.myAjax.method = 'POST';
@@ -81,9 +83,9 @@
             const endpoint = 'https://poll-api-rest.herokuapp.com/vote';
             const local = 'http://localhost:5000/vote';
             this.$.myAjax.url = endpoint;
-          this.$.myAjax.method = 'POST';
-          this.$.myAjax.body = JSON.stringify(event.detail);
-          this.$.myAjax.generateRequest();
+            this.$.myAjax.method = 'POST';
+            this.$.myAjax.body = JSON.stringify(event.detail);
+            this.$.myAjax.generateRequest();
         }
 
         getQuestions() {
@@ -95,7 +97,7 @@
         }
 
         responseManagement() {
-          this.poll = this.$.myAjax.lastResponse;
+          this.set('questions',this.$.myAjax.lastResponse);
         }
       }
 

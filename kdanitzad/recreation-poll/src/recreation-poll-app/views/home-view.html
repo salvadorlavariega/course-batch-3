@@ -55,7 +55,7 @@
 
         _addOption(){
             const option = this.$.masterOption.value;
-            this.allOptions.push({option: option, vote: 0});
+            this.allOptions.push({option: option, votes: 0});
             const li = document.createElement('li');
             li.textContent = option;
             this.$.myOptionsList.appendChild(li);
