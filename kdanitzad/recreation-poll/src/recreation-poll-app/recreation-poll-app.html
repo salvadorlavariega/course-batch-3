@@ -29,7 +29,7 @@
                 fallback-selection="home"
                 role="main">
             <home-view view="home" on-save-question="pullQuestion"></home-view>
-            <poll-view view="poll" data="[[poll]]" on-voting-poll="voteOption"></poll-view>
+            <poll-view view="poll" data="[[questions]]" on-voting-poll="voteOption"></poll-view>
         </iron-pages>
 
 
@@ -55,29 +55,41 @@
 
         static get properties() {
           return {
-            poll: {
-              type: Object,
-              value: {}
+            questions: {
+              type: Array,
+              value: []
             }
           };
         }
 
+          connectedCallback() {
+              super.connectedCallback();
+              this.getQuestions();
+          }
+
+
         pullQuestion(event) {
-          this.$.myAjax.url = 'http://localhost:5000/poll';
+            const endpoint = 'https://poll-api-rest.herokuapp.com/poll ';
+            const local = 'http://localhost:5000/poll';
+          this.$.myAjax.url = endpoint;
           this.$.myAjax.method = 'POST';
           this.$.myAjax.body = JSON.stringify(event.detail);
           this.$.myAjax.generateRequest();
         }
 
         voteOption(event) {
-          this.$.myAjax.url = 'http://localhost:5000/vote';
+            const endpoint = 'https://poll-api-rest.herokuapp.com/vote';
+            const local = 'http://localhost:5000/vote';
+            this.$.myAjax.url = endpoint;
           this.$.myAjax.method = 'POST';
           this.$.myAjax.body = JSON.stringify(event.detail);
           this.$.myAjax.generateRequest();
         }
 
         getQuestions() {
-          this.$.myAjax.url = 'http://localhost:5000/polls';
+            const endpoint = 'https://poll-api-rest.herokuapp.com/polls';
+            const local = 'http://localhost:5000/polls';
+          this.$.myAjax.url = endpoint;
           this.$.myAjax.method = 'GET';
           this.$.myAjax.generateRequest();
         }

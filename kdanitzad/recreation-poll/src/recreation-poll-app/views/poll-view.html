@@ -1,5 +1,7 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-
+<link rel="import" href="../../../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../../../bower_components/google-chart/google-chart-loader.html">
+<link rel="import" href="../../../bower_components/google-chart/google-chart-styles.html">
 <dom-module id="poll-view">
     <template>
         <style>
@@ -12,9 +14,11 @@
 
 
         <template is="dom-repeat" items="[[data]]" as="question">
-            <iron-label>[[question.question]]</iron-label>
+            <iron-label>[[question.question]]:</iron-label>
             <template is="dom-repeat" items="[[question.options]]" as="option" index-as="i">
+                <iron-label>[[question.votes]]</iron-label>
                 <paper-button on-click="addVote">[[option.option]]</paper-button>
+                <div id="piechart" style="width: 900px; height: 500px;"> </div>
             </template>
         </template>
 
@@ -38,15 +42,14 @@
               pollId: event.model.parentModel.question.id,
               option: event.model.option.i
             }
-
-          }))
+          }));
         }
 
         static get properties() {
           return {
             data: {
-              type: Object,
-              value: {}
+              type: Array,
+              value: []
             },
             title: {
               type: String,
