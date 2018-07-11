@@ -3,6 +3,7 @@
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
 
 <dom-module id="p2-component">
     <template>
@@ -16,6 +17,15 @@
                 color: white;
             }
         </style>
+        <iron-ajax
+                id="ajaxId"
+                method="post"
+                url="https/ponchos/course/3"
+                on-response="onResponse"
+                handle-as="json"
+                content-type="application/json">
+
+        </iron-ajax>
         <ul>
             <template is="dom-repeat" items="[[myArray]]" as="lol" index-as="indexA" id="a">
                 <li>
@@ -58,7 +68,25 @@
           this.dispatchEvent(new CustomEvent('eventito', {
             bubbles: true,
             composed: true,
-            detail: element.value
+            detail: this.toUppercase(element.value)
+          }));
+          this.resetField(element);
+        }
+
+        toUppercase(value){
+          return value;
+        }
+
+        resetField(element) {
+          element.value = '';
+          this.$.ajaxId.generateRequest();
+        }
+
+        onResponse(response){
+          this.dispatchEvent(new CustomEvent('answering', {
+            bubbles: true,
+            composed: true,
+            detail: response
           }));
         }
       }

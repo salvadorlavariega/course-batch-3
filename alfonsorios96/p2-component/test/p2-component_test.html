@@ -40,7 +40,6 @@
       assert.deepEqual(element.myArray, []);
       const elementShadowRoot = element.shadowRoot;
       const elementList = elementShadowRoot.querySelector('ul');
-      console.log(elementList.childNodes);
       let liList = [];
       for (const node of elementList.childNodes) {
         if (node.nodeName === 'li') {
@@ -52,27 +51,39 @@
 
     test('setting a property on the element works', (done) => {
       // Create a test fixture
+
+
       const element = fixture('ChangedPropertyTestFixture');
-      const arrayDummy = [ {
-        name: 'Emanuel',
-        last: 'Díaz'
-      },
+      const mock = sinon.mock(element.$.ajaxId).expects('generateRequest');
+      const spy = sinon.spy(element, 'resetField');
+      const fakeFun = () => {
+         return 'HELLO !';
+      };
+      const stub = sinon.stub(element,'toUppercase', fakeFun);
+      const arrayDummy = [
+        {
+          name: 'Emanuel',
+          last: 'Díaz'
+        },
         {
           name: 'Karla',
           last: 'D'
         } ];
       assert.deepEqual(element.myArray, arrayDummy);
-      const user = arrayDummy[1];
+      const user = arrayDummy[ 1 ];
       const index = arrayDummy.indexOf(user);
       element.$.a.render();
       const input = element.shadowRoot.querySelector(`#input-${index}`);
       input.value = 'Hello !';
       const button = input.parentNode.querySelector('paper-button');
       element.addEventListener('eventito', event => {
-        assert.strictEqual(event.detail, 'Hello !');
+        assert.strictEqual(event.detail, 'HELLO !');
         done();
       });
       button.click();
+      assert(mock.once());
+      assert(spy.calledOnce === true);
+      assert.strictEqual('', input.value);
     });
 
   });
