@@ -8,6 +8,7 @@
 
     <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../node_modules/sinon-stub-promise/index.js"></script>
 
     <link rel="import" href="../p2-component.html">
 </head>
@@ -52,14 +53,13 @@
     test('setting a property on the element works', (done) => {
       // Create a test fixture
 
-
       const element = fixture('ChangedPropertyTestFixture');
       const mock = sinon.mock(element.$.ajaxId).expects('generateRequest');
       const spy = sinon.spy(element, 'resetField');
       const fakeFun = () => {
-         return 'HELLO !';
+        return 'HELLO !';
       };
-      const stub = sinon.stub(element,'toUppercase', fakeFun);
+      const stub = sinon.stub(element, 'toUppercase', fakeFun);
       const arrayDummy = [
         {
           name: 'Emanuel',
@@ -84,6 +84,25 @@
       assert(mock.once());
       assert(spy.calledOnce === true);
       assert.strictEqual('', input.value);
+    });
+
+    test('Promise rejection', function() {
+      const element = fixture('ChangedPropertyTestFixture');
+      const myRejection = {
+        code: 101
+      };
+      const promise = element.myPromise(2);
+      return promise.catch(error => {
+        assert.deepEqual(error, myRejection);
+      });
+    });
+
+    test('Promise resolved', function() {
+      const element = fixture('ChangedPropertyTestFixture');
+      const promise = element.myPromise(1);
+      return promise.then(data => {
+        assert.strictEqual(data, 'success');
+      });
     });
 
   });
