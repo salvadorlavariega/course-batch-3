@@ -29,19 +29,19 @@
     </test-fixture>
 
     <script>
-      suite('polymer-application', function() {
+      suite('polymer-application', ()=> {
 
-        test('instantiating the element with default properties works', function() {
-          var element = fixture('BasicTestFixture');
+        test('instantiating the element with default properties works', ()=> {
+          const element = fixture('BasicTestFixture');
           assert.deepEqual(element.tabs, undefined);
         });
 
-        test('showing right tabs', function() {
+        test('showing right tabs', ()=> {
           // Create a test fixture
-          var element = fixture('ChangedPropertyTestFixture');
+          const element = fixture('ChangedPropertyTestFixture');
             assert.deepEqual(element.tabs.length, 4);
-          var elementShadowRoot = element.shadowRoot;
-          var elementPaperTabs = elementShadowRoot.querySelector('paper-tabs');
+          const elementShadowRoot = element.shadowRoot;
+          const elementPaperTabs = elementShadowRoot.querySelector('paper-tabs');
           element.$.repeat.render();
           const values = ['1','2','3','4'];
           let indexValues = 0;
@@ -53,13 +53,13 @@
             }
         });
 
-          test('showing right content', function(done) {
+          test('showing right content', (done)=> {
               // Create a test fixture
-              var element = fixture('ChangedPropertyTestFixture');
+              const element = fixture('ChangedPropertyTestFixture');
               assert.deepEqual(element.tabs.length, 4);
-              var elementShadowRoot = element.shadowRoot;
-              var elementPaperTabs = elementShadowRoot.querySelector('paper-tabs');
-              var elementContainer = elementShadowRoot.querySelector('#container');
+              const elementShadowRoot = element.shadowRoot;
+              const elementPaperTabs = elementShadowRoot.querySelector('paper-tabs');
+              const elementContainer = elementShadowRoot.querySelector('#container');
               element.$.repeat.render();
               const contentMock = "<h5>Title</h5><br><p>lorem lora<\/p>";
               element.addEventListener('click', event => {
