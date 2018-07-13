@@ -1,0 +1,219 @@
+<template>
+    <style>
+        .tabsContainer{
+            display: block;
+            width: 100%;
+            background-color: #2a86cA;
+        }
+        .contentContainer{
+            width: 100%;
+            background-color: #666666;
+        }
+        .tab{
+            display: inline-block;
+            text-align: center;
+        }
+        .selected{
+            background-color: #b92a45;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+    <div class="tabsContainer" id="title"></div>
+    <div class="contentContainer" id="content"></div>
+</template>
+
+<script>
+    ((customElements, document)=>{
+        'use strict';
+        class MagicTabs extends HTMLElement{
+            constructor(){
+                super();
+            }
+
+            connectedCallback(){
+                this._initTemplate();
+            }
+
+            _initTemplate(){
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const template = document.currentScript.ownerDocument.querySelector('template');
+                const titlesNodes = template.content.querySelector('#title');
+                this._removeTitlesNodes(titlesNodes);
+                this._createDivsElements(titlesNodes, 0, 5);
+                this._addArrowsButtons(titlesNodes);
+                shadowRoot.appendChild(document.importNode(template.content, true));
+                const shadowTitlesNodes = shadowRoot.querySelector('#title').childNodes;
+                this._addOnClickEvent(shadowTitlesNodes);
+            }
+
+            set tabs(value){
+                return this.setAttribute('tabs', value);
+            }
+
+            get tabs(){
+                return this._getJSONObject(this.getAttribute('tabs'));
+            }
+
+            static get observedAttributes() {
+                return [ 'tabs' ];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                if(this.shadowRoot) {
+                    const titles = this.shadowRoot.querySelector('#title');
+                    const content = this.shadowRoot.querySelector('#content');
+                    this._removeTitlesNodes(titles);
+                    content.innerHTML = '';
+                    this._addBasicToTitleElements(titles, 0, 5);
+                }
+
+            }
+
+            _getJSONObject(stringTabs) {
+                const array = JSON.parse(stringTabs);
+                if (Array.isArray(array) === true) {
+                    return array;
+                } else {
+                    throw new Error('The data for tabs is not valid');
+                }
+            }
+
+            _createDivsElements(titles, startIndex, stopIndex){
+                const tabs = this.tabs;
+                for(let tabCount = 1;  startIndex <= stopIndex && tabCount <= 5 && startIndex < tabs.length; startIndex ++, tabCount ++){
+                    const div = this._buildDivTab(tabs[startIndex], startIndex);
+                    titles.appendChild(div);
+                }
+                return titles;
+            }
+
+
+            _buildDivTab(tab, index){
+                const div = document.createElement('div');
+                div.setAttribute('class', 'tab');
+                div.setAttribute('index', index);
+                div.setAttribute('content', tab.content);
+                div.innerHTML = tab.tab;
+                return div;
+            }
+
+            _addOnClickEvent(nodes){
+             for (const node of nodes){
+                 if(!this._isButton(node)){
+                     node.addEventListener('click', (spanEvent)=> {
+                         this.shadowRoot.querySelector('#content').innerHTML = spanEvent.target.getAttribute('content');
+                         const tabSelected = this.shadowRoot.querySelector('.selected');
+                         if(tabSelected != null) {
+                             tabSelected.setAttribute('class', 'tab');
+                         }
+                         spanEvent.target.setAttribute('class', 'selected');
+                     })
+                 } else {
+                     node.addEventListener('click', (buttonEvent) => {
+                         this._addClickButtonEventFunction(buttonEvent);
+                     })
+                 }
+             }
+            }
+
+            _addClickButtonEventFunction(buttonEvent){
+                const titles = this.shadowRoot.querySelector('#title');
+                const value = parseInt(buttonEvent.target.getAttribute('value'));
+                if(buttonEvent.target.innerText === '<'){
+                    this._removeTitlesNodes(titles);
+                    this._addBasicToTitleElements(titles, this._getStartIndexByReturn(value),
+                        this._getStopIndexByReturn(value));
+                } else {
+                    const startIndex = this._getStartIndexByContinue(value);
+                    const stopIndex= this._getStopIndexByContinue(value);
+                    if(startIndex < stopIndex){
+                        this._removeTitlesNodes(titles);
+                        this._addBasicToTitleElements(titles, startIndex, stopIndex);
+                    }
+                }
+            }
+
+            _addBasicToTitleElements(titles, startIndex, stopIndex){
+                this._createDivsElements(titles, startIndex, stopIndex);
+                this._setTabWidth(titles.childNodes);
+                this._addArrowsButtons(titles);
+                this._addOnClickEvent(titles.childNodes);
+            }
+
+            _removeTitlesNodes(titlesNodes){
+                while (titlesNodes.firstChild) {
+                    titlesNodes.removeChild(titlesNodes.firstChild);
+                }
+            }
+            _getStartIndexByReturn(value){
+                let startIndex = value - 5;
+                if(startIndex < 0) {
+                    startIndex = 0;
+                }
+                return startIndex;
+            }
+
+            _getStopIndexByReturn(value){
+                if(value < 5) {
+                    value = 5;
+                }
+                return value;
+            }
+
+            _getStartIndexByContinue(value){
+                let startIndex = value + 1;
+                if(startIndex >= this.tabs.length) {
+                    startIndex = value;
+                }
+                return startIndex;
+            }
+
+            _getStopIndexByContinue(value){
+                let stopIndex = value + 5;
+                if(stopIndex >= this.tabs.length) {
+                    stopIndex = this.tabs.length - 1;
+                }
+                return stopIndex;
+            }
+
+            _isButton(node){
+                return node.hasChildNodes() && (node.innerText === '<' || node.innerText === '>' );
+            }
+
+            _addArrowsButtons(titlesNodes){
+                const startIndex = titlesNodes.firstChild.getAttribute('index');
+                const endIndex = titlesNodes.lastChild.getAttribute('index');
+                if(startIndex != 0){
+                    titlesNodes.insertBefore(this._getLeftButton(startIndex), titlesNodes.firstChild);
+                }
+                if(endIndex < this.tabs.length -1){
+                    titlesNodes.appendChild(this._getRightButton(endIndex));
+                }
+                this._setTabWidth(titlesNodes.childNodes);
+            }
+
+            _setTabWidth(nodes){
+                for(const node of nodes){
+                    node.style.width = 100/nodes.length + '%';
+                }
+            }
+
+            _getLeftButton(index) {
+                    const leftButton = document.createElement('button');
+                    leftButton.innerHTML = '<';
+                    leftButton.setAttribute('value', index);
+                    return leftButton;
+            }
+
+            _getRightButton(index){
+                const rightButton = document.createElement('button');
+                rightButton.innerHTML = '>';
+                rightButton.setAttribute('value', index);
+                return rightButton;
+            }
+
+        }
+        window.customElements.define('magic-tabs', MagicTabs);
+    })(window.customElements, document);
+</script>

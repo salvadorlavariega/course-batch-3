@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="one-component">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <h2>Create new poll</h2>
+
+        <paper-input label="Question" id="question"></paper-input>
+
+        <paper-button on-click="_createOption">Add new option</paper-button>
+
+        <div class="options" id="options">
+            <paper-input label="Option"></paper-input>
+            <paper-input label="Option"></paper-input>
+        </div>
+
+        <paper-button on-click="createPoll">Create poll</paper-button>
+
+    </template>
+
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class OneComponent extends Polymer.Element {
+        static get is() {
+          return 'one-component';
+        }
+
+        static get properties() {
+          return {};
+        }
+
+        createPoll() {
+          const poll = {
+            question: this.$.question.value,
+            options: []
+          };
+
+          const options = this.$.options.childNodes;
+
+          for (const option of options) {
+            if (option.value !== undefined) {
+              poll.options.push({
+                option: option.value,
+                votes: 0
+              });
+            }
+          }
+
+          this.dispatchEvent(new CustomEvent('new-poll', {
+            bubbles: true,
+            composed: true,
+            detail: poll
+          }));
+        }
+
+        _createOption() {
+          const input = document.createElement('paper-input');
+          input.label = 'Option';
+          this.$.options.appendChild(input);
+        }
+      }
+
+      window.customElements.define(OneComponent.is, OneComponent);
+    </script>
+</dom-module>

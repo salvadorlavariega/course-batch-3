@@ -54,15 +54,17 @@
 
         const slot = this.shadowRoot.querySelector('slot');
         const nodes = slot.assignedNodes();
-
         this._render(nodes);
       }
 
       _render(nodes) {
         for (const node of nodes) {
-          if (node.localName === 'template') {
+          if (node.localName === 'template' && this.shadowRoot) {
             const htmlTemplate = node.innerHTML;
-            this.shadowRoot.innerHTML = this._bindData(htmlTemplate);
+            this.shadowRoot.innerHTML = '';
+            for (const item of this.items) {
+              this.shadowRoot.innerHTML += this._bindData(htmlTemplate, item);
+            }
             this.dispatchEvent(new CustomEvent('dom-changed', {
               bubbles: true,
               composed: true
@@ -72,12 +74,38 @@
         }
       }
 
-      _bindData(html) {
-        let htmlStringRendered = '';
-        for (const item of this.items) {
-          htmlStringRendered += html.replace('[[item]]', item);
+      _bindData(html, item) {
+        const expressions = html.match(/\[\[([a-zA-Z\_/.]*\]\])/g);
+        return this._replaceExpressions(html, expressions, item);
+      }
+
+      _replaceExpressions(html, expressions, item) {
+        let htmlStringRendered = html;
+
+        for (const expression of expressions) {
+          htmlStringRendered = htmlStringRendered.replace(expression, this._getValueNested(expression, item));
         }
+
         return htmlStringRendered;
+      }
+
+      _getValueNested(expression, item) {
+        let newValue = '';
+        let expressionCleaned = expression.replace('[[', '');
+        expressionCleaned = expressionCleaned.replace(']]', '');
+        const treeExpressionNested = expressionCleaned.split('.');
+        newValue = this._recursiveValue(item, treeExpressionNested);
+        return newValue;
+      }
+
+      _recursiveValue(item, tree) {
+        if (tree.length === 0) {
+          return item;
+        } else {
+          const index = tree[ 0 ];
+          tree.splice(0, 1);
+          return this._recursiveValue(item[ index ], tree);
+        }
       }
     }
 

@@ -1,0 +1,98 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../one-component/one-component.html">
+<link rel="import" href="../two-component/two-component.html">
+
+<dom-module id="p2-app-app">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}"
+                   pattern="/:page"
+                   data="{{data}}"></app-route>
+
+        <iron-ajax
+                id="apiRest"
+                headers='{"Content-Type": "application/json"}'
+                handle-as="json"
+                on-response="_handleResponse"
+                debounce-duration="300"></iron-ajax>
+
+        <paper-button on-click="goToView" data-view="home">HOME</paper-button>
+        <paper-button on-click="goToView" data-view="polls">POLLS</paper-button>
+
+        <iron-pages
+                selected="{{data.page}}"
+                attr-for-selected="view"
+                fallback-selection="home"
+                role="main">
+            <one-component view="home" on-new-poll="createPoll"></one-component>
+            <two-component view="polls" polls="[[polls]]" on-vote-poll="vote"></two-component>
+        </iron-pages>
+    </template>
+
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class P2AppApp extends Polymer.Element {
+        static get is() {
+          return 'p2-app-app';
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.getPollsList();
+        }
+
+        static get properties() {
+          return {
+            polls: {
+              type: Array,
+              value: []
+            }
+          };
+        }
+
+        goToView(event) {
+          this.set('data.page', event.currentTarget.getAttribute('data-view'));
+        }
+
+        createPoll(event) {
+          this.$.apiRest.url = 'http://localhost:5000/poll';
+          this.$.apiRest.method = 'POST';
+          this.$.apiRest.body = JSON.stringify(event.detail);
+          this.$.apiRest.generateRequest();
+        }
+
+        getPollsList() {
+          this.$.apiRest.url = 'http://localhost:5000/polls';
+          this.$.apiRest.method = 'GET';
+          this.$.apiRest.generateRequest();
+        }
+
+        vote(event) {
+          this.$.apiRest.url = 'http://localhost:5000/vote';
+          this.$.apiRest.method = 'POST';
+          this.$.apiRest.body = JSON.stringify(event.detail);
+          this.$.apiRest.generateRequest();
+        }
+
+        _handleResponse() {
+          this.set('polls', this.$.apiRest.lastResponse);
+        }
+      }
+
+      window.customElements.define(P2AppApp.is, P2AppApp);
+    </script>
+</dom-module>

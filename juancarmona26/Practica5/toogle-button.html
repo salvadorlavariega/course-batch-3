@@ -1,0 +1,102 @@
+<template id="myElementTemplate" value="true">
+    <style>
+      html{background:rgba(0,0,0,0.4);text-align:center;font-size:2em;}
+input:checked + label {
+  background: lime;
+}
+input:checked + label {
+  color: red;
+}
+input + label {
+  display: inline-block;
+  height: 40px;
+  border-radius: 25px;
+  width: 100px;
+  background: tomato;
+  position: relative;
+  transition: all 0.4s;
+  cursor: pointer;
+  border: 5px solid lightgray;
+  box-shadow: inset 2px 2px 5px black, 2px 2px 5px black;
+}
+input[type="checkbox"] {
+  display: none;
+}
+input + label:before {
+  content: "";
+  position: absolute;
+  background: white;
+  height: 30px;
+  width: 30px;
+  top: 5px;
+  transition: all 0.4s;
+  left: calc(100% - 35px);
+  border-radius: 50%;
+  box-shadow: 2px 2px 5px black;
+}
+input:checked + label:before {
+  left: 5px;
+}
+    </style>    
+    <!-- <button id="button" > -->
+    
+      <input type="checkbox" id="myonoffswitch" > </input>
+    
+      <label id="otro" for="myonoffswitch"></label>
+    
+    <!-- </button> -->
+</template>
+
+
+<script defer>
+(function myButtonElement(customElements, document) {
+    'use strict';
+
+    class MyButtonElement extends HTMLElement {
+
+       constructor() {
+        super();       
+        
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        const templ = document.currentScript.ownerDocument.querySelector('template');
+        shadowRoot.appendChild(document.importNode(templ.content, true));        
+        
+
+        const contentTemplate = templ.content;
+        console.log(contentTemplate);
+
+        templ.setAttribute('value', true);              
+     
+      }
+
+      connectedCallback() {
+        
+        this.addEventListener('click', this._onClick.bind(this));
+      }
+
+      _onClick(event) {
+                
+        
+        event.preventDefault();        
+        if(this.getAttribute('value') === 'true'){          
+          this.setAttribute('value', false);
+        } else if(this.getAttribute('value') === 'false'){          
+          this.setAttribute('value', true);
+        } else {
+          this.setAttribute('value', false);
+        }        
+        
+        this.textContent = this.getAttribute('value');        
+        this.dispatchEvent(new CustomEvent('my-element-clicked', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            clicked: true
+          }
+        }));        
+      }
+    }
+
+    customElements.define('my-element', MyButtonElement);
+  })(window.customElements, document)
+</script>

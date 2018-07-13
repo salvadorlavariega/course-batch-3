@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/highcharts-chart/highcharts-chart.html">
+
+<dom-module id="two-component">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h2>Polls list</h2>
+
+        <ul>
+            <template is="dom-repeat" items="[[polls]]" as="poll">
+                <li>[[poll.question]]</li>
+                <ul>
+                    <template is="dom-repeat" items="[[poll.options]]" as="option" index-as="indexOption">
+                        <li>[[option.option]] : [[option.votes]]</li>
+                        <paper-button on-click="vote">Vote !</paper-button>
+                    </template>
+                </ul>
+                <highcharts-chart type="pie"
+                                  label="Work" title="hola" subtitle="hola"
+                                  data='[{"name":"Mary", "y": 36.3},{"name":"Davis", "y":60},{"name":"John", "y":13.6}]'></highcharts-chart>
+            </template>
+        </ul>
+    </template>
+
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class TwoComponent extends Polymer.Element {
+        static get is() {
+          return 'two-component';
+        }
+
+        static get properties() {
+          return {
+            polls: {
+              type: Array,
+              value: []
+            }
+          };
+        }
+
+        vote(event) {
+          this.dispatchEvent(new CustomEvent('vote-poll', {
+            bubbles: true,
+            composed: true,
+            detail: {
+              pollId: event.model.parentModel.poll.id,
+              option: event.model.indexOption
+            }
+          }));
+        }
+      }
+
+      window.customElements.define(TwoComponent.is, TwoComponent);
+    </script>
+</dom-module>

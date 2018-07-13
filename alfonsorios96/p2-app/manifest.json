@@ -1,0 +1,6 @@
+{
+  "name": "p2-app",
+  "short_name": "p2-app",
+  "start_url": "/",
+  "display": "standalone"
+}

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>poly-tabs test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../poly-tabs.html">
+  </head>
+  <body>
+
+  <test-fixture id="BasicTestFixture">
+    <template>
+      <poly-tabs></poly-tabs>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="ChangedPropertyTestFixture">
+    <template>
+      <poly-tabs tabs='[{"tab": "Tab - 0","content": "some text"}]'>
+      </poly-tabs>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="ClickToTab">
+    <template>
+      <poly-tabs tabs='[{"tab": "Tab - 1","content": "some text 1"},
+                              {"tab": "Tab - 2","content": "some text 2"},
+                              {"tab": "Tab - 3","content": "some text 3"}]'>
+      </poly-tabs>
+    </template>
+  </test-fixture>
+
+    <script>
+      suite('poly-tabs', () => {
+
+        test('instantiating the element with default content should be empty', function() {
+          const element = fixture('BasicTestFixture');
+          assert.equal(element.$.content.innerHTML, '');
+        });
+
+        test('setting a tab property on the element works', function() {
+          // Create a test fixture
+          const element = fixture('ChangedPropertyTestFixture');
+          assert.equal(element.tabs[0].tab, 'Tab - 0');
+          assert.equal(element.tabs[0].content, 'some text');
+        });
+
+        test('click tab 2 and the content should show "some text 2"', function() {
+          // Create a test fixture
+          const element = fixture('ClickToTab');
+          const spy = sinon.spy(element, 'callbackTab');
+
+          const paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          assert.equal('paper-tabs', paperTabs.nodeName.toLowerCase()); //check if I can find the Parent Node
+          const template = element.$.domRe;
+          template.render();
+          const paperTabList = [];
+          for(const node of paperTabs.children){
+            if(node.nodeName === 'PAPER-TAB')
+            paperTabList.push(node); // push all the nodes in an array
+          }
+          assert.equal(3, paperTabList.length); // check if the array.length is correct
+
+        });
+
+
+      });
+    </script>
+
+  </body>
+</html>

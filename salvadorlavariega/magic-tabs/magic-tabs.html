@@ -1,0 +1,146 @@
+<link rel="import" href="tab-item.html">
+<template>
+    <link rel="stylesheet" href="magic-tabs.css">
+    <ul></ul>
+    <div></div>
+</template>
+<script>
+
+    ((customElements, document) =>{
+        class MagicTabs extends HTMLElement {
+
+            constructor(){
+                super();
+                this.tabSelected = 0;
+            }
+
+            set tabs(value){
+                this.setAttribute('tabs', value);
+            }
+
+            get tabs(){
+                return this.getAttribute('tabs');
+            }
+
+            static get observedAttributes(){
+                return ['tabs'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue){
+                if(name === 'tabs'){
+                    const tabsArr = this._validTabsInput(newValue);
+                    if( tabsArr.length > 0){
+                        this._renderTabs(tabsArr,0,5);
+                    }
+                }
+            }
+
+
+            connectedCallback(){
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                const template = document.querySelector('template');
+                shadowRoot.appendChild(document.importNode(template.content, true));
+                const tabsAttr = this.getAttribute('tabs');
+                const tabsArr = this._validTabsInput(tabsAttr);
+                if(tabsArr !== null && tabsArr.length > 0){
+                    this._renderTabs(tabsArr, 0, 5);
+                }
+
+            }
+
+            _validTabsInput(stringValue){
+                let json = [];
+                try{
+                    json = JSON.parse(stringValue);
+                    for(const [index,tab] of json.entries()){
+                        tab.id = index + 1;
+                    }
+                } catch(error){
+
+                }
+                return json;
+            }
+
+            _renderTabs(tabsArr, begin, end){
+
+                if(this.shadowRoot && tabsArr.length > 0) {
+                    this.shadowRoot.querySelector('ul').innerHTML = '';
+
+                    if(tabsArr.length < 5){
+                        this._createTabs(tabsArr, 100);
+                    }
+
+                    else  {
+                        const toLeft = this._createArrowElement('<');
+                        const toRight = this._createArrowElement('>');
+                        this.shadowRoot.querySelector('ul').append(toLeft);
+                        this._createTabs(tabsArr.slice(begin,end), 90);
+                        this.shadowRoot.querySelector('ul').append(toRight);
+
+                        toRight.addEventListener('click',(event) => {
+                            if(tabsArr.slice(end,end + 5).length > 0){
+                                this._renderTabs(tabsArr, end, end + 5);
+                            }
+                        });
+                        toLeft.addEventListener('click',(event) => {
+                            if(tabsArr.slice( begin - 5, begin).length > 0) {
+                                this._renderTabs(tabsArr, begin - 5, begin);
+                            }
+                        });
+                    }
+                }
+            }
+
+            _createTabs(tabsArr, maxWidth) {
+                const width = maxWidth / tabsArr.length;
+                for (let [index, jTab] of tabsArr.entries()) {
+                    const tabItem = document.createElement('tab-item');
+                    const self = this;
+                    tabItem.addEventListener('tab-clicked', (event) => {
+                        this._removeAttrActiveToAll();
+                        self.tabSelected = jTab.id;
+                        tabItem.setAttribute('active', 'true');
+                        this.shadowRoot.querySelector('div').innerHTML = event.detail.contenido;
+                    });
+
+                    tabItem.addEventListener('tab-content-changed', (event) => {
+                        if(tabItem.hasAttribute('active')){
+                            this.shadowRoot.querySelector('div').innerHTML = event.detail.contenido;
+                        }
+                    });
+
+                    tabItem.setAttribute('name', jTab.tab);
+                    tabItem.setAttribute('content', jTab.content);
+                    tabItem.setAttribute('width', width);
+                    this.shadowRoot.querySelector('ul').append(tabItem);
+                    if(self.tabSelected == jTab.id){
+                        tabItem.setAttribute('active', 'true');
+                    }
+                }
+            }
+
+            _removeAttrActiveToAll(){
+                const ulEml =  this.shadowRoot.querySelector('ul');
+                const nodes = ulEml.getElementsByTagName('tab-item');
+                for (const node of nodes) {
+                    node.removeAttribute('active');
+                }
+            }
+
+            _createArrowElement(name) {
+                const aElm = document.createElement('a');
+                const liElm = document.createElement('li');
+                liElm.style.width = '5%';
+                aElm.textContent = name;
+                liElm.appendChild(aElm);
+                return liElm;
+            }
+
+
+        }
+
+        customElements.define('magic-tabs', MagicTabs);
+    })(window.customElements, document.currentScript.ownerDocument);
+
+
+</script>
