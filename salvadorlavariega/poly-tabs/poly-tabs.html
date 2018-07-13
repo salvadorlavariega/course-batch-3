@@ -1,10 +1,8 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html">
 
-
-
-<dom-module id="poly-tabs-app">
+<dom-module id="poly-tabs">
   <template>
 
     <style>
@@ -20,7 +18,7 @@
     </style>
 
     <paper-tabs selected="0" scrollable>
-      <template  is="dom-repeat" items="[[tabs]]" >
+      <template id="domRe" is="dom-repeat" items="[[tabs]]" >
         <paper-tab link on-click="callbackTab">
           [[item.tab]]
         </paper-tab>
@@ -29,16 +27,19 @@
     </paper-tabs>
 
     <div id="content"></div>
-
   </template>
 
   <script>
     /**
+     * `poly-tabs`
+     *
+     *
      * @customElement
      * @polymer
+     * @demo demo/index.html
      */
-    class PolyTabsApp extends Polymer.Element {
-      static get is() { return 'poly-tabs-app'; }
+    class PolyTabs extends Polymer.Element {
+      static get is() { return 'poly-tabs'; }
       static get properties() {
         return {
           tabs: {
@@ -54,7 +55,6 @@
       }
     }
 
-
-    window.customElements.define(PolyTabsApp.is, PolyTabsApp);
+    window.customElements.define(PolyTabs.is, PolyTabs);
   </script>
 </dom-module>
