@@ -25,7 +25,14 @@
       <h3>Basic responsive-table demo</h3>
       <demo-snippet>
         <template>
-          <responsive-table></responsive-table>
+          <responsive-table headers='["Name","Nickname","Group","Observations"]' rows='[{
+             "title": "Ed",
+             "cells": ["Eddard Stark", "king Ed", "Winterfell", "Lord of Winterfell"]
+           },
+           {
+             "title": "Tony",
+             "cells": ["Tonny Stark", "Iron man", "Avenger", "Rich antropologie and playboy"]
+           }]'></responsive-table>
         </template>
       </demo-snippet>
     </div>
